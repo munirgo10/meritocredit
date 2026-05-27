@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merito — Tu crédito, tu mérito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root{
+  --navy:#0C1F35; --navy2:#163352; --navy3:#1E4A70;
+  --gold:#C8790F; --gold2:#E8961A; --gold3:#FDF0DC;
+  --cream:#F5F0E8; --cream2:#E8E0D0; --cream3:#D8CCB8;
+  --white:#FFFFFF;
+  --tx1:#0C1F35; --tx2:#4A5568; --tx3:#8A9BAA;
+  --green:#25D366; --green2:#1DAA54;
+  --ok:#1A7F5A; --warn:#B7600A; --err:#C0392B;
+  --ff-display:'Fraunces',Georgia,serif;
+  --ff-body:'Plus Jakarta Sans',sans-serif;
+  --r:14px; --r2:20px;
+  --sh1:0 2px 12px rgba(12,31,53,.07),0 1px 3px rgba(12,31,53,.04);
+  --sh2:0 8px 32px rgba(12,31,53,.11),0 2px 8px rgba(12,31,53,.06);
+  --sh3:0 20px 60px rgba(12,31,53,.14),0 4px 16px rgba(12,31,53,.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff-body);background:var(--cream);color:var(--tx1);overflow-x:hidden;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:60px;padding:0 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(245,240,232,.92);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(12,31,53,.08);
+  transition:background .3s;
+}
+.nav-logo{
+  font-family:var(--ff-display);font-size:20px;font-weight:600;
+  color:var(--navy);display:flex;align-items:center;gap:8px
+}
+.logo-mark{
+  width:26px;height:26px;background:var(--navy);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--gold2);font-family:var(--ff-display)
+}
+.nav-right{display:flex;align-items:center;gap:16px}
+.lang-toggle{
+  display:flex;background:var(--cream2);border-radius:20px;
+  padding:3px;border:1px solid rgba(12,31,53,.1)
+}
+.lang-btn{
+  padding:3px 11px;border-radius:16px;font-size:12px;font-weight:600;
+  cursor:pointer;border:none;background:transparent;color:var(--tx2);
+  transition:all .15s;font-family:var(--ff-body)
+}
+.lang-btn.on{background:var(--white);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.nav-wa{
+  display:flex;align-items:center;gap:6px;background:var(--green);
+  color:var(--white);padding:7px 16px;border-radius:8px;
+  font-size:13px;font-weight:700;transition:all .18s;font-family:var(--ff-body)
+}
+.nav-wa:hover{background:var(--green2);transform:translateY(-1px)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;padding:80px 40px 60px;
+  display:grid;grid-template-columns:1.05fr .95fr;gap:56px;
+  align-items:center;max-width:1200px;margin:0 auto
+}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--navy);color:var(--gold2);
+  font-size:11px;font-weight:700;padding:5px 14px;
+  border-radius:20px;letter-spacing:.6px;text-transform:uppercase;
+  margin-bottom:26px
+}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:var(--gold2);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{
+  font-family:var(--ff-display);font-size:54px;font-weight:500;
+  line-height:1.07;color:var(--navy);margin-bottom:20px;letter-spacing:-1.5px
+}
+h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{
+  font-size:17px;color:var(--tx2);line-height:1.65;
+  margin-bottom:32px;max-width:480px
+}
+.hero-sub strong{color:var(--tx1);font-weight:600}
+.cta-group{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.btn-wa{
+  display:inline-flex;align-items:center;gap:8px;background:var(--green);
+  color:var(--white);padding:14px 24px;border-radius:10px;
+  font-size:15px;font-weight:700;transition:all .2s;border:none;
+  cursor:pointer;font-family:var(--ff-body);
+  box-shadow:0 4px 18px rgba(37,211,102,.28)
+}
+.btn-wa:hover{background:var(--green2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,211,102,.32)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:6px;background:transparent;
+  color:var(--navy);padding:14px 22px;border-radius:10px;
+  font-size:15px;font-weight:600;border:1.5px solid rgba(12,31,53,.18);
+  transition:all .18s;cursor:pointer;font-family:var(--ff-body)
+}
+.btn-ghost:hover{border-color:var(--navy);background:var(--white)}
+.micro-trust{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--tx3)}
+.mt-item{display:flex;align-items:center;gap:5px}
+.mt-item::before{content:'✓';color:var(--ok);font-weight:700;font-size:13px}
+
+/* ── SIMULATOR ── */
+.sim-card{
+  background:var(--white);border-radius:22px;padding:30px;
+  box-shadow:var(--sh3);border:1px solid rgba(12,31,53,.05);
+  position:relative;overflow:hidden
+}
+.sim-top-bar{
+  position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--navy) 0%,var(--gold) 60%,var(--gold2) 100%)
+}
+.sim-label{font-size:12px;font-weight:700;color:var(--tx3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:4px}
+.sim-title{font-family:var(--ff-display);font-size:18px;font-weight:500;color:var(--navy);margin-bottom:22px}
+
+/* Score display */
+.score-wrap{text-align:center;margin-bottom:12px}
+.score-num{
+  font-family:var(--ff-display);font-size:76px;font-weight:600;
+  color:var(--navy);line-height:1;letter-spacing:-4px;
+  transition:color .3s
+}
+.score-badge{
+  display:inline-block;font-size:12px;font-weight:600;
+  padding:4px 14px;border-radius:20px;margin-top:6px;margin-bottom:18px;
+  transition:all .3s
+}
+.score-badge.bad{background:#FDECEA;color:var(--err)}
+.score-badge.fair{background:#FEF3E2;color:var(--warn)}
+.score-badge.good{background:#E8F5E9;color:var(--ok)}
+
+/* Slider */
+.slider-wrap{position:relative;margin-bottom:6px}
+input[type=range]{
+  width:100%;height:6px;border-radius:3px;outline:none;
+  cursor:pointer;-webkit-appearance:none;appearance:none;
+  background:var(--cream2);
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+  background:var(--white);border:3px solid var(--navy);cursor:pointer;
+  box-shadow:0 2px 8px rgba(12,31,53,.22);transition:transform .15s
+}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.slider-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-bottom:22px}
+
+/* Result tiles */
+.result-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px}
+.r-tile{background:var(--cream);border-radius:10px;padding:12px 8px;text-align:center;border:1px solid var(--cream2)}
+.r-val{font-family:var(--ff-display);font-size:20px;font-weight:600;color:var(--ok);line-height:1;margin-bottom:4px;transition:all .3s}
+.r-val.gold{color:var(--gold)}
+.r-key{font-size:10px;color:var(--tx3);line-height:1.35}
+
+.sim-cta{
+  width:100%;padding:14px;background:var(--green);color:var(--white);
+  border:none;border-radius:10px;font-size:14px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  gap:8px;transition:all .2s;font-family:var(--ff-body);
+  box-shadow:0 4px 16px rgba(37,211,102,.26)
+}
+.sim-cta:hover{background:var(--green2);transform:translateY(-2px)}
+.sim-micro{text-align:center;font-size:11px;color:var(--tx3);margin-top:9px}
+
+/* ── TRUST BAR ── */
+.trust-bar{background:var(--navy);padding:16px 40px}
+.trust-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px
+}
+.tb-item{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:rgba(255,255,255,.72);padding:5px 12px
+}
+.tb-icon{font-size:14px}
+
+/* ── SECTION COMMONS ── */
+.section{padding:80px 40px;max-width:1200px;margin:0 auto}
+.s-tag{
+  display:inline-block;font-size:11px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:12px
+}
+h2{
+  font-family:var(--ff-display);font-size:40px;font-weight:500;
+  color:var(--navy);line-height:1.15;margin-bottom:14px;letter-spacing:-.8px
+}
+h2 em{font-style:italic;color:var(--gold)}
+.s-sub{font-size:16px;color:var(--tx2);line-height:1.65;max-width:540px;margin-bottom:48px}
+
+/* ── PAIN ── */
+.pain-bg{background:var(--cream)}
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pain-card{
+  background:var(--white);border-radius:var(--r);padding:28px;
+  border:1px solid var(--cream2);transition:all .22s;position:relative;
+  overflow:hidden
+}
+.pain-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:var(--gold);transform:scaleX(0);transition:transform .3s;transform-origin:left
+}
+.pain-card:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.pain-card:hover::after{transform:scaleX(1)}
+.p-icon{font-size:30px;margin-bottom:14px}
+.p-title{font-family:var(--ff-display);font-size:19px;font-weight:500;color:var(--navy);margin-bottom:9px}
+.p-desc{font-size:13px;color:var(--tx2);line-height:1.65}
+.p-stat{
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--cream2);
+  font-size:13px;font-weight:700;color:var(--err);display:flex;align-items:center;gap:5px
+}
+.p-stat::before{content:'↑';font-size:15px}
+
+/* ── HOW ── */
+.how-wrap{background:var(--navy);padding:80px 40px}
+.how-inner{max-width:1200px;margin:0 auto}
+.how-wrap h2{color:var(--white)}
+.how-wrap .s-sub{color:rgba(255,255,255,.55)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.step{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r);padding:28px;transition:all .2s
+}
+.step:hover{background:rgba(255,255,255,.09);border-color:rgba(200,121,26,.4)}
+.step-n{
+  font-family:var(--ff-display);font-size:48px;font-weight:300;
+  color:var(--gold);opacity:.6;line-height:1;margin-bottom:16px;letter-spacing:-2px
+}
+.step-t{font-family:var(--ff-display);font-size:20px;font-weight:500;color:var(--white);margin-bottom:9px}
+.step-d{font-size:13px;color:rgba(255,255,255,.55);line-height:1.65}
+.step-tag{
+  display:inline-block;margin-top:14px;font-size:11px;font-weight:600;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(200,121,26,.15);color:var(--gold2);
+  border:1px solid rgba(200,121,26,.25)
+}
+
+/* ── NUMBERS ── */
+.nums-bg{background:var(--cream)}
+.nums-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.num-card{
+  background:var(--white);border-radius:var(--r);padding:26px 20px;
+  text-align:center;border:1px solid var(--cream2);transition:all .2s
+}
+.num-card:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.num-val{
+  font-family:var(--ff-display);font-size:42px;font-weight:600;
+  color:var(--navy);line-height:1;letter-spacing:-2px
+}
+.num-val span{color:var(--gold)}
+.num-label{font-size:13px;color:var(--tx2);margin-top:7px;line-height:1.4}
+
+/* ── PRICING ── */
+.price-bg{background:var(--cream2)}
+.price-wrap{max-width:660px;margin:0 auto;text-align:center}
+.price-card{
+  background:var(--white);border-radius:22px;padding:48px 44px;
+  box-shadow:var(--sh3);margin-top:36px;
+  border:2px solid var(--navy);position:relative;overflow:hidden
+}
+.price-accent{
+  position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--navy),var(--gold))
+}
+.price-badge{
+  display:inline-block;background:var(--gold3);color:var(--gold);
+  font-size:12px;font-weight:700;padding:5px 16px;border-radius:20px;
+  margin-bottom:14px;border:1px solid rgba(200,121,26,.2)
+}
+.price-amount{
+  font-family:var(--ff-display);font-size:80px;font-weight:600;
+  color:var(--navy);line-height:1;letter-spacing:-4px;margin-bottom:4px
+}
+.price-amount sup{font-size:30px;font-weight:400;letter-spacing:0;vertical-align:top;margin-top:14px;display:inline-block}
+.price-period{font-size:15px;color:var(--tx3);margin-bottom:32px}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:32px;text-align:left}
+.feat-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--tx2);line-height:1.45}
+.feat-check{color:var(--ok);font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
+.price-cta{
+  display:block;width:100%;padding:16px;background:var(--green);
+  color:var(--white);border:none;border-radius:11px;
+  font-size:16px;font-weight:700;cursor:pointer;text-align:center;
+  transition:all .2s;font-family:var(--ff-body);margin-bottom:16px;
+  box-shadow:0 4px 20px rgba(37,211,102,.28);text-decoration:none
+}
+.price-cta:hover{background:var(--green2);transform:translateY(-2px)}
+.price-guarantees{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.pg-item{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:4px}
+.pg-item::before{content:'✓';color:var(--ok);font-weight:700}
+
+/* ── FINAL CTA ── */
+.fcta{
+  padding:96px 40px;text-align:center;background:var(--cream);
+  position:relative;overflow:hidden
+}
+.fcta::before{
+  content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,121,26,.07) 0%,transparent 65%);
+  pointer-events:none
+}
+.fcta h2{font-size:50px;letter-spacing:-1.5px;position:relative;margin-bottom:14px}
+.fcta .s-sub{margin:0 auto 36px;max-width:480px;text-align:center;position:relative}
+.fcta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+.fcta-micro{margin-top:18px;font-size:12px;color:var(--tx3);position:relative}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);padding:36px 40px 24px}
+.ft-inner{max-width:1200px;margin:0 auto}
+.ft-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;margin-bottom:28px}
+.ft-logo{font-family:var(--ff-display);font-size:20px;color:var(--white);display:flex;align-items:center;gap:8px}
+.ft-tagline{font-size:13px;color:rgba(255,255,255,.38);margin-top:4px}
+.ft-links{display:flex;gap:24px;flex-wrap:wrap}
+.ft-links a{font-size:12px;color:rgba(255,255,255,.45);transition:color .2s}
+.ft-links a:hover{color:rgba(255,255,255,.85)}
+.ft-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin-bottom:18px}
+.ft-bottom{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.ft-legal{font-size:11px;color:rgba(255,255,255,.28);line-height:1.65;max-width:620px}
+.ft-seal{font-size:11px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:5px}
+
+/* ── FLOAT WA ── */
+.float-wa{
+  position:fixed;bottom:28px;right:28px;z-index:400;
+  width:54px;height:54px;border-radius:50%;background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(37,211,102,.4);transition:all .2s;
+  animation:float-pulse 3s ease-in-out infinite
+}
+.float-wa:hover{transform:scale(1.1);background:var(--green2)}
+@keyframes float-pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4)}50%{box-shadow:0 4px 28px rgba(37,211,102,.6)}}
+
+/* ── SCROLL ANIMATIONS ── */
+.fade{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.fade.in{opacity:1;transform:translateY(0)}
+.fade.d1{transition-delay:.1s}.fade.d2{transition-delay:.2s}.fade.d3{transition-delay:.3s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-wa span{display:none}
+  .hero{grid-template-columns:1fr;padding:80px 20px 52px;gap:36px}
+  h1{font-size:38px}
+  h2{font-size:30px}
+  .fcta h2{font-size:34px}
+  .section,.fcta{padding:60px 20px}
+  .how-wrap{padding:60px 20px}
+  .pain-grid,.steps,.nums-grid{grid-template-columns:1fr}
+  .trust-bar,.price-bg{padding-left:20px;padding-right:20px}
+  .trust-inner{gap:2px}
+  .tb-item{padding:4px 6px;font-size:11px}
+  .price-card{padding:32px 24px}
+  .feat-grid{grid-template-columns:1fr}
+  footer{padding:32px 20px 20px}
+  .ft-top{flex-direction:column}
+  .float-wa{bottom:18px;right:18px;width:48px;height:48px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo"><div class="logo-mark">M</div> Merito</a>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn on" onclick="setLang('es',this)">ES</button>
+      <button class="lang-btn" onclick="setLang('en',this)">EN</button>
+    </div>
+    <a href="https://wa.me/15555555555" class="nav-wa" target="_blank">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span id="nav-wa-txt">Chatea ahora</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="background:var(--cream)">
+  <div class="hero">
+    <div>
+      <div class="hero-pill"><div class="pill-dot"></div><span id="pill-txt">Reparación de Crédito · IA en Español</span></div>
+      <h1 id="h1">Tu score de <em>hoy</em> no define tu <em>futuro.</em></h1>
+      <p class="hero-sub" id="hero-sub">Merito repara tu historial crediticio con <strong>inteligencia artificial</strong> — en español, sin contratos, por <strong>$49 al mes</strong>.</p>
+      <div class="cta-group">
+        <a href="https://wa.me/15555555555" class="btn-wa" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span id="cta1">Analiza tu crédito gratis</span>
+        </a>
+        <a href="#how" class="btn-ghost"><span id="cta2">¿Cómo funciona?</span> →</a>
+      </div>
+      <div class="micro-trust">
+        <div class="mt-item" id="mt1">Sin tarjeta de crédito</div>
+        <div class="mt-item" id="mt2">Cancela cuando quieras</div>
+        <div class="mt-item" id="mt3">100% en español</div>
+      </div>
+    </div>
+
+    <!-- SIMULATOR -->
+    <div class="sim-card">
+      <div class="sim-top-bar"></div>
+      <div class="sim-label" id="sim-label">Simulador gratuito</div>
+      <div class="sim-title" id="sim-title">¿Cuánto puede mejorar tu score?</div>
+      <div class="score-wrap">
+        <div class="score-num" id="sNum">520</div>
+        <div><span class="score-badge fair" id="sBadge">Regular — hay margen de mejora</span></div>
+      </div>
+      <div class="slider-wrap">
+        <input type="range" id="slider" min="300" max="700" value="520" oninput="updSim()">
+      </div>
+      <div class="slider-ends"><span id="sl-lo">300 — Muy bajo</span><span id="sl-hi">700 — Bueno</span></div>
+      <div class="result-row">
+        <div class="r-tile"><div class="r-val" id="r6">630</div><div class="r-key" id="r6k">Score en<br>6 meses</div></div>
+        <div class="r-tile"><div class="r-val gold" id="r12">700+</div><div class="r-key" id="r12k">Score en<br>12 meses</div></div>
+        <div class="r-tile"><div class="r-val" id="rSav">$230/mes</div><div class="r-key" id="rSavK">Ahorro en<br>intereses</div></div>
+      </div>
+      <button class="sim-cta" onclick="goWA()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span id="simCtaTxt">Quiero mi plan personalizado →</span>
+      </button>
+      <div class="sim-micro" id="simMicro">Solo tu WhatsApp · Sin cargos · Sin compromisos</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="tb-item"><span class="tb-icon">🏛️</span><span id="tb1">Basado en la ley FCRA</span></div>
+    <div class="tb-item"><span class="tb-icon">💬</span><span id="tb2">100% en español e inglés</span></div>
+    <div class="tb-item"><span class="tb-icon">📅</span><span id="tb3">Sin contratos largos</span></div>
+    <div class="tb-item"><span class="tb-icon">🤖</span><span id="tb4">Potenciado por IA</span></div>
+    <div class="tb-item"><span class="tb-icon">✅</span><span id="tb5">Cancela cuando quieras</span></div>
+  </div>
+</div>
+
+<!-- PAIN POINTS -->
+<section class="pain-bg">
+  <div class="section">
+    <div class="fade">
+      <div class="s-tag" id="pain-tag">El problema</div>
+      <h2 id="pain-h2">Un score bajo no es solo<br>un número — es <em>dinero real</em></h2>
+      <p class="s-sub" id="pain-sub">Con un score entre 480–620 pagas miles de dólares más al año. Y muchas veces hay errores en tu reporte que están bajando tu score sin que lo sepas.</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card fade d1">
+        <div class="p-icon">🚗</div>
+        <div class="p-title" id="p1t">Préstamo de auto</div>
+        <div class="p-desc" id="p1d">Con score 520 pagas hasta 22% de interés. Con score 720 pagas 5%. En el mismo auto, esa diferencia puede ser más de $250 al mes durante 4 años.</div>
+        <div class="p-stat" id="p1s">$3,000+ extra al año</div>
+      </div>
+      <div class="pain-card fade d2">
+        <div class="p-icon">🏠</div>
+        <div class="p-title" id="p2t">Hipoteca rechazada</div>
+        <div class="p-desc" id="p2d">La mayoría de hipotecas requieren score mínimo de 620–680. Con score bajo te rechazan directamente o la tasa se dispara — impidiéndote el sueño de tener tu casa.</div>
+        <div class="p-stat" id="p2s">$200K+ extra en 30 años</div>
+      </div>
+      <div class="pain-card fade d3">
+        <div class="p-icon">📋</div>
+        <div class="p-title" id="p3t">Errores en tu reporte</div>
+        <div class="p-desc" id="p3d">Según la FTC, el 34% de los reportes tienen errores: deudas de otra persona, fechas incorrectas, cuentas duplicadas. Todo bajando tu score injustamente.</div>
+        <div class="p-stat" id="p3s">1 de cada 3 personas los tiene</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-wrap">
+    <div class="how-inner">
+      <div class="fade">
+        <div class="s-tag" style="color:var(--gold2)" id="how-tag">Cómo funciona</div>
+        <h2 id="how-h2">Tres pasos para el crédito<br>que <em>mereces</em></h2>
+        <p class="s-sub" id="how-sub">No necesitas saber de crédito. Nosotros hacemos el trabajo — tú ves los resultados mes a mes en español.</p>
+      </div>
+      <div class="steps">
+        <div class="step fade d1">
+          <div class="step-n">01</div>
+          <div class="step-t" id="s1t">Analizamos tu situación</div>
+          <div class="step-d" id="s1d">Con IA revisamos tus 3 reportes — Equifax, Experian y TransUnion — e identificamos cada ítem que se puede disputar o mejorar. Plan listo en 48 horas.</div>
+          <div class="step-tag" id="s1tag">Gratis · 48 horas</div>
+        </div>
+        <div class="step fade d2">
+          <div class="step-n">02</div>
+          <div class="step-t" id="s2t">Disputamos lo injusto</div>
+          <div class="step-d" id="s2d">Generamos cartas personalizadas bajo la ley FCRA y las enviamos a los bureaus. Tienen 30 días para verificar. Si no pueden — el ítem se elimina.</div>
+          <div class="step-tag" id="s2tag">Automático · Sin papeleo</div>
+        </div>
+        <div class="step fade d3">
+          <div class="step-n">03</div>
+          <div class="step-t" id="s3t">Construimos tu historial</div>
+          <div class="step-d" id="s3d">Mientras eliminamos lo negativo, te guiamos para construir historial positivo: secured cards, credit builder loans. Doble acción, resultados más rápidos.</div>
+          <div class="step-tag" id="s3tag">Meses 1–12</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="nums-bg">
+  <div class="section">
+    <div class="fade" style="text-align:center;max-width:600px;margin:0 auto 48px">
+      <div class="s-tag" id="nums-tag">Por qué Merito</div>
+      <h2 id="nums-h2">Resultados que <em>hablan solos</em></h2>
+    </div>
+    <div class="nums-grid">
+      <div class="num-card fade d1"><div class="num-val">+<span>127</span></div><div class="num-label" id="n1">puntos promedio de mejora en 12 meses</div></div>
+      <div class="num-card fade d2"><div class="num-val"><span>30</span></div><div class="num-label" id="n2">días para ver los primeros resultados</div></div>
+      <div class="num-card fade d3"><div class="num-val"><span>34</span>%</div><div class="num-label" id="n3">de reportes tienen errores corregibles</div></div>
+      <div class="num-card fade"><div class="num-val">$<span>49</span></div><div class="num-label" id="n4">al mes — mitad del precio de la competencia</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="price-bg" style="padding:80px 40px">
+  <div class="price-wrap">
+    <div class="fade" style="text-align:center">
+      <div class="s-tag" id="price-tag">Precio</div>
+      <h2 id="price-h2">Simple. Transparente.<br><em>Sin sorpresas.</em></h2>
+      <p class="s-sub" style="margin:0 auto" id="price-sub">Todo lo que necesitas para reparar y construir tu crédito en una membresía.</p>
+    </div>
+    <div class="price-card fade">
+      <div class="price-accent"></div>
+      <div class="price-badge" id="price-badge">Plan Merito — Todo incluido</div>
+      <div class="price-amount"><sup>$</sup>49</div>
+      <div class="price-period" id="price-period">por mes · cancela cuando quieras</div>
+      <div class="feat-grid" id="feat-grid">
+        <div class="feat-item"><span class="feat-check">✓</span><span id="f1">Análisis de los 3 bureaus</span></div>
+        <div class="feat-item"><span class="feat-check">✓</span><span id="f2">Disputas ilimitadas con IA</span></div>
+        <div class="feat-item"><span class="feat-check">✓</span><span id="f3">Cartas personalizadas por caso</span></div>
+        <div class="feat-item"><span class="feat-check">✓</span><span id="f4">Reporte mensual de progreso</span></div>
+        <div class="feat-item"><span class="feat-check">✓</span><span id="f5">Guía de credit building</span></div>
+        <div class="feat-item"><span class="feat-check">✓</span><span id="f6">Soporte WhatsApp en español</span></div>
+      </div>
+      <a href="https://wa.me/15555555555" class="price-cta" target="_blank" id="price-cta">Empezar hoy por WhatsApp →</a>
+      <div class="price-guarantees">
+        <div class="pg-item" id="pg1">Sin contratos</div>
+        <div class="pg-item" id="pg2">Sin cargos ocultos</div>
+        <div class="pg-item" id="pg3">Cancela cuando quieras</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="fcta">
+  <h2 class="fade" id="fcta-h2">¿Listo para el crédito<br>que <em>mereces?</em></h2>
+  <p class="s-sub fade" id="fcta-sub">Chatea ahora por WhatsApp — respondemos en minutos, en español.</p>
+  <div class="fcta-btns fade">
+    <a href="https://wa.me/15555555555" class="btn-wa" target="_blank" style="font-size:16px;padding:16px 32px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span id="fcta-btn">Chatea por WhatsApp gratis</span>
+    </a>
+  </div>
+  <div class="fcta-micro fade" id="fcta-micro">✓ Sin costo &nbsp;·&nbsp; ✓ Respuesta en minutos &nbsp;·&nbsp; ✓ En español</div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--cream2);padding:80px 40px">
+  <div style="max-width:760px;margin:0 auto">
+    <div class="fade" style="text-align:center;margin-bottom:48px">
+      <div class="s-tag" id="faq-tag">Preguntas frecuentes</div>
+      <h2 id="faq-h2">Todo lo que necesitas<br><em>saber</em></h2>
+    </div>
+    <div class="faq-list" id="faq-list">
+
+      <div class="faq-item fade">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span id="q1">¿Es legal reparar mi crédito con Merito?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p id="a1">Sí, 100% legal. La Fair Credit Reporting Act (FCRA) es una ley federal que le da a cada persona el derecho de disputar información inexacta o no verificable en su reporte de crédito. Merito ejerce estos derechos legales a tu nombre — igual que un abogado, pero con IA y a una fracción del costo.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade d1">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span id="q2">¿Cuánto tiempo tarda en mejorar mi score?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p id="a2">Los primeros resultados se ven en 30–45 días — el tiempo que los bureaus tienen para responder a una disputa. Mejoras significativas (50–100+ puntos) típicamente ocurren entre los meses 3 y 6. El proceso completo de reparación y construcción toma 6–12 meses dependiendo de tu situación.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade d2">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span id="q3">¿Pueden eliminar cualquier ítem negativo de mi reporte?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p id="a3">Solo podemos disputar ítems que sean inexactos, no verificables u obsoletos (más de 7 años en el reporte). No prometemos eliminar información correcta y verificable — eso sería ilegal. Lo que sí podemos hacer es identificar errores que muchas personas no saben que tienen y disputarlos efectivamente.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade d3">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span id="q4">¿Funciona con ITIN además de SSN?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p id="a4">Sí. Trabajamos con clientes que tienen SSN e ITIN. Muchos latinos en US tienen crédito asociado a su ITIN — podemos revisar, analizar y disputar ítems en tu reporte independientemente del tipo de número de identificación que uses.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span id="q5">¿Qué necesito para empezar?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p id="a5">Solo necesitas tu número de WhatsApp. Después de tu primer contacto, te guiamos para obtener tu reporte de crédito gratis en annualcreditreport.com (sin afectar tu score). Con eso, analizamos tu situación en 48 horas y te presentamos tu plan completo.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade d1">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span id="q6">¿Puedo cancelar cuando quiera?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p id="a6">Sí, en cualquier momento sin penalización. La ley CROA te protege — tienes 3 días para cancelar después de contratar, y después puedes cancelar cuando quieras con un simple mensaje de WhatsApp. Sin letras chiquitas, sin cargos ocultos.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade d2">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span id="q7">¿Por qué $49 al mes si la competencia cobra $100–$150?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p id="a7">Porque usamos inteligencia artificial para hacer el trabajo que antes requería un equipo grande de personas. Lexington Law tiene más de 350 empleados — Merito tiene IA. Eso nos permite darte el mismo servicio (o mejor) a la mitad del precio. La tecnología democratiza el acceso a servicios que antes solo podían pagar quienes más lo necesitaban.</p>
+        </div>
+      </div>
+
+      <div class="faq-item fade d3">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span id="q8">¿Garantizan resultados específicos?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p id="a8">No podemos garantizar un número específico de puntos — ninguna empresa legítima puede hacerlo, y la ley lo prohíbe. Lo que sí garantizamos es el proceso: análisis completo, disputas personalizadas con seguimiento mensual, y si en los primeros 30 días no ves progreso, te devolvemos tu primer mes.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:10px}
+.faq-item{background:var(--white);border-radius:var(--r);border:1px solid var(--cream3);overflow:hidden;transition:box-shadow .2s}
+.faq-item:hover{box-shadow:var(--sh1)}
+.faq-q{
+  width:100%;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;
+  background:transparent;border:none;cursor:pointer;font-family:var(--ff-body);
+  font-size:15px;font-weight:600;color:var(--tx1);text-align:left;gap:16px;transition:background .15s
+}
+.faq-q:hover{background:var(--cream)}
+.faq-icon{font-size:22px;font-weight:300;color:var(--gold);flex-shrink:0;transition:transform .3s;line-height:1}
+.faq-q.open .faq-icon{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+.faq-a.open{max-height:300px;padding:0 24px 20px}
+.faq-a p{font-size:14px;color:var(--tx2);line-height:1.7}
+@media(max-width:900px){
+  #faq{padding:60px 20px}
+  .faq-q{font-size:14px;padding:16px 18px}
+  .faq-a.open{padding:0 18px 16px}
+}
+</style>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div>
+        <div class="ft-logo"><div class="logo-mark">M</div> Merito</div>
+        <div class="ft-tagline" id="ft-tag">Tu crédito, tu mérito.</div>
+      </div>
+      <div class="ft-links">
+        <a href="#how" id="fl1">Cómo funciona</a>
+        <a href="#pricing" id="fl2">Precios</a>
+        <a href="#faq" id="fl3">Preguntas frecuentes</a>
+        <a href="#" id="fl4">Privacidad</a>
+        <a href="#" id="fl5">Términos</a>
+      </div>
+    </div>
+    <hr class="ft-divider">
+    <div class="ft-bottom">
+      <div class="ft-legal" id="ft-legal">Merito Credit opera bajo la Fair Credit Reporting Act (FCRA) y la Credit Repair Organizations Act (CROA). No garantizamos resultados específicos — los resultados varían según la situación de cada cliente. Los servicios de reparación de crédito tienen regulaciones federales que protegen al consumidor. Tienes derecho a cancelar en cualquier momento. © 2025 Merito Credit. Todos los derechos reservados.</div>
+      <div class="ft-seal">🔒 <span id="ft-seal">Datos protegidos · SSL</span></div>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING WA BUTTON -->
+<a href="https://wa.me/15555555555" class="float-wa" target="_blank" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+/* ── SIMULATOR ── */
+const WA = 'https://wa.me/15555555555?text=';
+function goWA(){ window.open(WA + encodeURIComponent('Hola, quiero mi plan de crédito gratis'),'_blank') }
+
+function updSim(){
+  const s = parseInt(document.getElementById('slider').value);
+  document.getElementById('sNum').textContent = s;
+
+  /* slider fill */
+  const pct = ((s-300)/400)*100;
+  document.getElementById('slider').style.background =
+    'linear-gradient(to right, var(--gold) '+pct+'%, var(--cream2) '+pct+'%)';
+
+  /* badge */
+  const b = document.getElementById('sBadge');
+  const lang = document.documentElement.lang||'es';
+  if(s<580){
+    b.textContent = lang==='es'?'Bajo — podemos ayudarte':'Low — we can help';
+    b.className='score-badge bad';
+  } else if(s<670){
+    b.textContent = lang==='es'?'Regular — hay margen de mejora':'Fair — room to improve';
+    b.className='score-badge fair';
+  } else {
+    b.textContent = lang==='es'?'Bueno — ¡sigamos subiendo!':'Good — keep climbing!';
+    b.className='score-badge good';
+  }
+
+  /* projections */
+  const p6 = Math.min(s + 80 + Math.round((700-s)*0.15), 790);
+  const p12 = Math.min(s + 150 + Math.round((700-s)*0.28), 820);
+  document.getElementById('r6').textContent = p6;
+  document.getElementById('r12').textContent = p12>=760?'760+':p12;
+
+  /* savings */
+  let sv;
+  if(s<550) sv='$290/mes'; else if(s<600) sv='$230/mes';
+  else if(s<650) sv='$165/mes'; else sv='$95/mes';
+  document.getElementById('rSav').textContent = sv;
+}
+updSim();
+
+/* ── FAQ ACCORDION ── */
+function toggleFaq(btn){
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  // close all
+  document.querySelectorAll('.faq-a').forEach(a=>a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(b=>b.classList.remove('open'));
+  // open clicked if it was closed
+  if(!isOpen){ answer.classList.add('open'); btn.classList.add('open'); }
+}
+
+/* ── LANGUAGE ── */
+const T = {
+  es:{
+    'pill-txt':'Reparación de Crédito · IA en Español',
+    'h1':'Tu score de <em>hoy</em> no define tu <em>futuro.</em>',
+    'hero-sub':'Merito repara tu historial crediticio con <strong>inteligencia artificial</strong> — en español, sin contratos, por <strong>$49 al mes</strong>.',
+    'cta1':'Analiza tu crédito gratis','cta2':'¿Cómo funciona?',
+    'mt1':'Sin tarjeta de crédito','mt2':'Cancela cuando quieras','mt3':'100% en español',
+    'sim-label':'Simulador gratuito','sim-title':'¿Cuánto puede mejorar tu score?',
+    'r6k':'Score en<br>6 meses','r12k':'Score en<br>12 meses','rSavK':'Ahorro en<br>intereses',
+    'simCtaTxt':'Quiero mi plan personalizado →','simMicro':'Solo tu WhatsApp · Sin cargos · Sin compromisos',
+    'nav-wa-txt':'Chatea ahora',
+    'tb1':'Basado en la ley FCRA','tb2':'100% en español e inglés','tb3':'Sin contratos largos','tb4':'Potenciado por IA','tb5':'Cancela cuando quieras',
+    'pain-tag':'El problema','pain-h2':'Un score bajo no es solo<br>un número — es <em>dinero real</em>',
+    'pain-sub':'Con un score entre 480–620 pagas miles de dólares más al año. Y muchas veces hay errores en tu reporte que están bajando tu score sin que lo sepas.',
+    'p1t':'Préstamo de auto','p2t':'Hipoteca rechazada','p3t':'Errores en tu reporte',
+    'p1s':'$3,000+ extra al año','p2s':'$200K+ extra en 30 años','p3s':'1 de cada 3 personas los tiene',
+    'how-tag':'Cómo funciona','how-h2':'Tres pasos para el crédito<br>que <em>mereces</em>',
+    'how-sub':'No necesitas saber de crédito. Nosotros hacemos el trabajo — tú ves los resultados mes a mes.',
+    's1t':'Analizamos tu situación','s2t':'Disputamos lo injusto','s3t':'Construimos tu historial',
+    's1tag':'Gratis · 48 horas','s2tag':'Automático · Sin papeleo','s3tag':'Meses 1–12',
+    'nums-tag':'Por qué Merito','nums-h2':'Resultados que <em>hablan solos</em>',
+    'n1':'puntos promedio de mejora en 12 meses','n2':'días para ver los primeros resultados',
+    'n3':'de reportes tienen errores corregibles','n4':'al mes — mitad del precio de la competencia',
+    'price-tag':'Precio','price-h2':'Simple. Transparente.<br><em>Sin sorpresas.</em>',
+    'price-sub':'Todo lo que necesitas en una membresía.','price-badge':'Plan Merito — Todo incluido',
+    'price-period':'por mes · cancela cuando quieras','price-cta':'Empezar hoy por WhatsApp →',
+    'pg1':'Sin contratos','pg2':'Sin cargos ocultos','pg3':'Cancela cuando quieras',
+    'fcta-h2':'¿Listo para el crédito<br>que <em>mereces?</em>',
+    'fcta-sub':'Chatea ahora por WhatsApp — respondemos en minutos, en español.',
+    'fcta-btn':'Chatea por WhatsApp gratis','fcta-micro':'✓ Sin costo · ✓ Respuesta en minutos · ✓ En español',
+    'ft-tag':'Tu crédito, tu mérito.',
+    'f1':'Análisis de los 3 bureaus','f2':'Disputas ilimitadas con IA',
+    'f3':'Cartas personalizadas por caso','f4':'Reporte mensual de progreso',
+    'f5':'Guía de credit building','f6':'Soporte WhatsApp en español',
+    'faq-tag':'Preguntas frecuentes','faq-h2':'Todo lo que necesitas<br><em>saber</em>',
+    'q1':'¿Es legal reparar mi crédito con Merito?',
+    'a1':'Sí, 100% legal. La Fair Credit Reporting Act (FCRA) es una ley federal que le da a cada persona el derecho de disputar información inexacta o no verificable en su reporte de crédito. Merito ejerce estos derechos legales a tu nombre — igual que un abogado, pero con IA y a una fracción del costo.',
+    'q2':'¿Cuánto tiempo tarda en mejorar mi score?',
+    'a2':'Los primeros resultados se ven en 30–45 días. Mejoras significativas (50–100+ puntos) ocurren entre los meses 3 y 6. El proceso completo toma 6–12 meses dependiendo de tu situación.',
+    'q3':'¿Pueden eliminar cualquier ítem negativo de mi reporte?',
+    'a3':'Solo podemos disputar ítems que sean inexactos, no verificables u obsoletos (más de 7 años). No prometemos eliminar información correcta y verificable. Lo que sí hacemos es identificar errores que muchas personas no saben que tienen y disputarlos efectivamente.',
+    'q4':'¿Funciona con ITIN además de SSN?',
+    'a4':'Sí. Trabajamos con clientes que tienen SSN e ITIN. Podemos revisar, analizar y disputar ítems en tu reporte independientemente del tipo de número de identificación que uses.',
+    'q5':'¿Qué necesito para empezar?',
+    'a5':'Solo tu WhatsApp. Te guiamos para obtener tu reporte gratis en annualcreditreport.com. Con eso, analizamos tu situación en 48 horas y te presentamos tu plan completo.',
+    'q6':'¿Puedo cancelar cuando quiera?',
+    'a6':'Sí, en cualquier momento sin penalización. Tienes 3 días para cancelar después de contratar (ley CROA), y después puedes cancelar con un simple mensaje de WhatsApp. Sin letras chiquitas.',
+    'q7':'¿Por qué $49 si la competencia cobra $100–$150?',
+    'a7':'Usamos inteligencia artificial para hacer el trabajo que antes requería un equipo grande. Lexington Law tiene 350+ empleados — Merito tiene IA. Eso nos permite darte el mismo servicio a la mitad del precio.',
+    'q8':'¿Garantizan resultados específicos?',
+    'a8':'No podemos garantizar un número específico de puntos — ninguna empresa legítima puede. Lo que garantizamos es el proceso: análisis, disputas con seguimiento, y si en 30 días no ves progreso, te devolvemos tu primer mes.',
+    'fl1':'Cómo funciona','fl2':'Precios','fl3':'Preguntas frecuentes','fl4':'Privacidad','fl5':'Términos',
+    'ft-legal':'Merito Credit opera bajo la Fair Credit Reporting Act (FCRA) y la Credit Repair Organizations Act (CROA). No garantizamos resultados específicos — los resultados varían según la situación de cada cliente. Tienes derecho a cancelar en cualquier momento. © 2025 Merito Credit. Todos los derechos reservados.',
+    'ft-seal':'Datos protegidos · SSL'
+  },
+  en:{
+    'pill-txt':'AI-Powered Credit Repair',
+    'h1':'Your score <em>today</em> doesn\'t define your <em>future.</em>',
+    'hero-sub':'Merito repairs your credit history using <strong>artificial intelligence</strong> — in Spanish and English, no long contracts, just <strong>$49/month</strong>.',
+    'cta1':'Analyze my credit free','cta2':'How it works',
+    'mt1':'No credit card needed','mt2':'Cancel anytime','mt3':'Bilingual support',
+    'sim-label':'Free simulator','sim-title':'How much can your score improve?',
+    'r6k':'Score in<br>6 months','r12k':'Score in<br>12 months','rSavK':'Interest<br>savings',
+    'simCtaTxt':'Get my personalized plan →','simMicro':'Just your WhatsApp · No charges · No commitments',
+    'nav-wa-txt':'Chat now',
+    'tb1':'Based on FCRA law','tb2':'English & Spanish support','tb3':'No long contracts','tb4':'AI-powered','tb5':'Cancel anytime',
+    'pain-tag':'The Problem','pain-h2':'A low score isn\'t just<br>a number — it\'s <em>real money</em>',
+    'pain-sub':'With a score between 480–620 you pay thousands of extra dollars a year in high interest. And often there are errors in your report bringing your score down unfairly.',
+    'p1t':'Auto loan','p2t':'Mortgage denied','p3t':'Errors on your report',
+    'p1s':'$3,000+ extra per year','p2s':'$200K+ extra over 30 years','p3s':'1 in 3 people have them',
+    'how-tag':'How It Works','how-h2':'Three steps to the credit<br>you <em>deserve</em>',
+    'how-sub':'You don\'t need to know credit. We do the work — you see results month by month.',
+    's1t':'We analyze your situation','s2t':'We dispute the unfair','s3t':'We build your history',
+    's1tag':'Free · 48 hours','s2tag':'Automatic · No paperwork','s3tag':'Months 1–12',
+    'nums-tag':'Why Merito','nums-h2':'Results that <em>speak for themselves</em>',
+    'n1':'average points improvement in 12 months','n2':'days to see first results',
+    'n3':'of reports have correctable errors','n4':'per month — half the price of competitors',
+    'price-tag':'Pricing','price-h2':'Simple. Transparent.<br><em>No surprises.</em>',
+    'price-sub':'Everything you need in one membership.','price-badge':'Merito Plan — All inclusive',
+    'price-period':'per month · cancel anytime','price-cta':'Start today via WhatsApp →',
+    'pg1':'No contracts','pg2':'No hidden fees','pg3':'Cancel anytime',
+    'fcta-h2':'Ready for the credit<br>you <em>deserve?</em>',
+    'fcta-sub':'Chat now on WhatsApp — we respond in minutes, in English or Spanish.',
+    'fcta-btn':'Chat on WhatsApp free','fcta-micro':'✓ Free · ✓ Response in minutes · ✓ Bilingual',
+    'ft-tag':'Your credit. Your merit.',
+    'f1':'Analysis of all 3 bureaus','f2':'Unlimited AI-powered disputes',
+    'f3':'Personalized letters per case','f4':'Monthly progress report',
+    'f5':'Credit building guide','f6':'WhatsApp support in English & Spanish',
+    'faq-tag':'Frequently Asked Questions','faq-h2':'Everything you need<br><em>to know</em>',
+    'q1':'Is credit repair with Merito legal?',
+    'a1':'Yes, 100% legal. The Fair Credit Reporting Act (FCRA) is a federal law giving every person the right to dispute inaccurate or unverifiable information on their credit report. Merito exercises these legal rights on your behalf — like a lawyer, but with AI at a fraction of the cost.',
+    'q2':'How long does it take to improve my score?',
+    'a2':'First results appear in 30–45 days — the time bureaus have to respond to a dispute. Significant improvements (50–100+ points) typically happen between months 3 and 6. The full repair and building process takes 6–12 months depending on your situation.',
+    'q3':'Can you remove any negative item from my report?',
+    'a3':'We can only dispute items that are inaccurate, unverifiable, or outdated (over 7 years on the report). We do not promise to remove accurate, verifiable information — that would be illegal. What we do is identify errors many people don\'t know they have and dispute them effectively.',
+    'q4':'Does it work with ITIN as well as SSN?',
+    'a4':'Yes. We work with clients who have SSN and ITIN. Many Latinos in the US have credit tied to their ITIN — we can review, analyze, and dispute items on your report regardless of which identification number you use.',
+    'q5':'What do I need to get started?',
+    'a5':'Just your WhatsApp number. We guide you to get your free report at annualcreditreport.com (without affecting your score). With that, we analyze your situation within 48 hours and present your complete plan.',
+    'q6':'Can I cancel anytime?',
+    'a6':'Yes, at any time with no penalty. CROA law protects you — you have 3 days to cancel after signing up, and afterwards you can cancel with a simple WhatsApp message. No fine print, no hidden fees.',
+    'q7':'Why $49 when competitors charge $100–$150?',
+    'a7':'We use artificial intelligence to do the work that used to require a large team. Lexington Law has 350+ employees — Merito has AI. That lets us give you the same (or better) service at half the price.',
+    'q8':'Do you guarantee specific results?',
+    'a8':'We cannot guarantee a specific number of points — no legitimate company can, and the law prohibits it. What we guarantee is the process: full analysis, personalized disputes with monthly tracking, and if you see no progress in the first 30 days, we refund your first month.',
+    'fl1':'How it works','fl2':'Pricing','fl3':'FAQ','fl4':'Privacy','fl5':'Terms',
+    'ft-legal':'Merito Credit operates under the Fair Credit Reporting Act (FCRA) and the Credit Repair Organizations Act (CROA). We do not guarantee specific results — results vary based on each client\'s individual situation. You have the right to cancel at any time. © 2025 Merito Credit. All rights reserved.',
+    'ft-seal':'Data protected · SSL'
+  }
+};
+
+function setLang(l,btn){
+  document.documentElement.lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const c=T[l];
+  const htmlIds=['h1','hero-sub','pain-h2','how-h2','nums-h2','price-h2','fcta-h2','r6k','r12k','rSavK','faq-h2'];
+  for(const[id,val] of Object.entries(c)){
+    const el=document.getElementById(id);
+    if(!el) continue;
+    if(htmlIds.includes(id)) el.innerHTML=val; else el.textContent=val;
+  }
+  updSim();
+}
+
+/* ── SCROLL ANIMATIONS ── */
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.12});
+document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').style.background=
+    window.scrollY>40?'rgba(245,240,232,.97)':'rgba(245,240,232,.92)';
+});
+</script>
+</body>
+</html>
