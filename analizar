@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analiza tu Crédito Gratis — Merito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0C1F35;--navy2:#163352;
+  --gold:#C8790F;--gold2:#E8961A;--gold3:#FDF0DC;
+  --cream:#F5F0E8;--cream2:#E8E0D0;--cream3:#D8CCB8;
+  --white:#FFFFFF;
+  --tx1:#0C1F35;--tx2:#4A5568;--tx3:#8A9BAA;
+  --green:#25D366;--green2:#1DAA54;
+  --ok:#1A7F5A;--warn:#B7600A;--err:#C0392B;
+  --ff-d:'Fraunces',Georgia,serif;
+  --ff-b:'Plus Jakarta Sans',sans-serif;
+  --r:14px;--r2:20px;
+  --sh1:0 2px 12px rgba(12,31,53,.07);
+  --sh2:0 8px 32px rgba(12,31,53,.11);
+  --sh3:0 20px 60px rgba(12,31,53,.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff-b);background:var(--cream);color:var(--tx1);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:60px;padding:0 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(245,240,232,.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(12,31,53,.08);
+}
+.logo{font-family:var(--ff-d);font-size:20px;font-weight:600;color:var(--navy);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-m{width:26px;height:26px;background:var(--navy);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold2);font-family:var(--ff-d)}
+.back-link{font-size:13px;color:var(--tx2);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s}
+.back-link:hover{color:var(--navy)}
+
+/* HERO */
+.hero{
+  padding:90px 40px 60px;text-align:center;
+  background:linear-gradient(180deg,var(--cream) 0%,var(--white) 100%);
+}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--navy);color:var(--gold2);
+  font-size:11px;font-weight:700;padding:5px 14px;
+  border-radius:20px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:20px
+}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:var(--gold2);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:var(--ff-d);font-size:46px;font-weight:500;color:var(--navy);line-height:1.1;margin-bottom:14px;letter-spacing:-1.5px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:16px;color:var(--tx2);max-width:520px;margin:0 auto 40px;line-height:1.65}
+
+/* STEPS GUIDE */
+.steps-guide{
+  display:flex;gap:0;justify-content:center;align-items:center;
+  max-width:720px;margin:0 auto 48px;flex-wrap:wrap;gap:8px
+}
+.sg-step{
+  display:flex;align-items:center;gap:8px;
+  background:var(--white);border:1px solid var(--cream2);
+  border-radius:10px;padding:10px 14px;flex:1;min-width:160px
+}
+.sg-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--navy);color:var(--white);
+  font-size:12px;font-weight:700;display:flex;
+  align-items:center;justify-content:center;flex-shrink:0
+}
+.sg-text{font-size:12px;color:var(--tx2);line-height:1.3}
+.sg-text strong{display:block;color:var(--tx1);font-weight:600}
+.sg-arrow{font-size:16px;color:var(--cream3);flex-shrink:0;display:none}
+
+/* MAIN CARD */
+.main-wrap{max-width:760px;margin:0 auto;padding:0 40px 80px}
+
+/* STEP 1 — Get report */
+.step-card{
+  background:var(--white);border-radius:var(--r2);
+  border:1px solid var(--cream2);overflow:hidden;
+  margin-bottom:20px;transition:all .3s;
+  box-shadow:var(--sh1)
+}
+.step-card.active{box-shadow:var(--sh3);border-color:var(--navy)}
+.step-header{
+  padding:18px 24px;display:flex;align-items:center;gap:14px;
+  cursor:pointer;
+}
+.step-num-big{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;font-family:var(--ff-d);
+  transition:all .3s
+}
+.step-card.active .step-num-big{background:var(--navy);color:var(--white)}
+.step-card.done .step-num-big{background:var(--ok);color:var(--white)}
+.step-card:not(.active):not(.done) .step-num-big{background:var(--cream2);color:var(--tx3)}
+.step-title-wrap{}
+.step-title{font-family:var(--ff-d);font-size:16px;font-weight:500;color:var(--navy);margin-bottom:2px}
+.step-card:not(.active):not(.done) .step-title{color:var(--tx3)}
+.step-subtitle{font-size:12px;color:var(--tx3)}
+.step-body{padding:0 24px 24px;display:none}
+.step-card.active .step-body{display:block}
+
+/* Report guide */
+.report-guide{
+  background:var(--cream);border-radius:var(--r);padding:16px;
+  margin-bottom:16px
+}
+.rg-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.rg-steps{display:flex;flex-direction:column;gap:8px}
+.rg-step{display:flex;gap:10px;align-items:flex-start}
+.rg-dot{
+  width:20px;height:20px;border-radius:50%;background:var(--navy);
+  color:var(--white);font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px
+}
+.rg-text{font-size:12px;color:var(--tx2);line-height:1.5}
+.rg-text a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--navy)}
+.rg-text a:hover{color:var(--gold)}
+
+/* Upload zone */
+.upload-zone{
+  border:2px dashed var(--cream3);border-radius:var(--r);
+  padding:32px 20px;text-align:center;cursor:pointer;
+  transition:all .2s;background:var(--cream);position:relative
+}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--navy);background:rgba(12,31,53,.03)}
+.upload-zone.has-file{border-color:var(--ok);background:rgba(26,127,90,.05);border-style:solid}
+.upload-icon{font-size:36px;margin-bottom:10px;line-height:1}
+.upload-title{font-size:14px;font-weight:600;color:var(--tx1);margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--tx3)}
+.upload-file-name{font-size:13px;font-weight:600;color:var(--ok);margin-top:6px}
+#fileInput{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+/* Form */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group label{font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.4px;text-transform:uppercase}
+.form-group input{
+  padding:10px 12px;border:1.5px solid var(--cream2);
+  border-radius:8px;font-size:14px;font-family:var(--ff-b);
+  color:var(--tx1);background:var(--white);outline:none;transition:border .2s
+}
+.form-group input:focus{border-color:var(--navy)}
+.form-group input::placeholder{color:var(--tx3)}
+
+/* Consent */
+.consent{
+  display:flex;align-items:flex-start;gap:10px;
+  margin-top:14px;padding:12px 14px;
+  background:var(--cream);border-radius:8px;cursor:pointer
+}
+.consent input[type=checkbox]{width:16px;height:16px;margin-top:1px;flex-shrink:0;accent-color:var(--navy)}
+.consent-text{font-size:11px;color:var(--tx2);line-height:1.55}
+.consent-text strong{color:var(--tx1)}
+
+/* Submit btn */
+.btn-analyze{
+  width:100%;margin-top:16px;padding:15px;
+  background:var(--navy);color:var(--white);border:none;
+  border-radius:10px;font-size:15px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  gap:8px;transition:all .2s;font-family:var(--ff-b)
+}
+.btn-analyze:hover:not(:disabled){background:var(--navy2);transform:translateY(-1px)}
+.btn-analyze:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* LOADING */
+.loading-state{
+  text-align:center;padding:40px 20px;display:none
+}
+.loading-state.show{display:block}
+.loader{
+  width:48px;height:48px;border:3px solid var(--cream2);
+  border-top-color:var(--navy);border-radius:50%;
+  animation:spin 1s linear infinite;margin:0 auto 16px
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-title{font-family:var(--ff-d);font-size:20px;font-weight:500;color:var(--navy);margin-bottom:8px}
+.loading-steps{font-size:13px;color:var(--tx2);line-height:2}
+.loading-step{opacity:.4;transition:opacity .5s}
+.loading-step.current{opacity:1;font-weight:600;color:var(--navy)}
+.loading-step.done{opacity:.6}
+.loading-step.done::after{content:' ✓';color:var(--ok)}
+
+/* RESULTS */
+.results-state{display:none}
+.results-state.show{display:block}
+
+.results-header{
+  background:var(--navy);border-radius:var(--r2) var(--r2) 0 0;
+  padding:28px 28px 24px;color:var(--white)
+}
+.rh-greeting{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:6px}
+.rh-title{font-family:var(--ff-d);font-size:24px;font-weight:500;color:var(--white);margin-bottom:16px}
+.score-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.score-big-wrap{text-align:center}
+.score-big{font-family:var(--ff-d);font-size:72px;font-weight:600;line-height:1;letter-spacing:-3px;transition:color .5s}
+.score-label{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px}
+.score-badge-r{
+  display:inline-block;font-size:11px;font-weight:700;
+  padding:3px 12px;border-radius:20px;margin-top:6px
+}
+.sb-bad{background:#FDECEA;color:#C0392B}
+.sb-fair{background:#FEF3E2;color:#B7600A}
+.sb-good{background:#E8F5E9;color:#1B7A3E}
+.projections{display:flex;gap:10px;flex:1;flex-wrap:wrap}
+.proj-card{
+  background:rgba(255,255,255,.08);border-radius:10px;
+  padding:12px 16px;flex:1;min-width:100px
+}
+.proj-val{font-family:var(--ff-d);font-size:26px;font-weight:600;color:var(--gold2);line-height:1;margin-bottom:3px}
+.proj-label{font-size:11px;color:rgba(255,255,255,.55);line-height:1.3}
+
+.results-body{
+  background:var(--white);border-radius:0 0 var(--r2) var(--r2);
+  padding:24px 28px;border:1px solid var(--cream2);border-top:none;
+  box-shadow:var(--sh3)
+}
+
+/* Items disputables */
+.items-title{
+  font-family:var(--ff-d);font-size:16px;font-weight:500;
+  color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:8px
+}
+.items-count{
+  background:var(--err);color:var(--white);
+  font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px
+}
+.items-sub{font-size:12px;color:var(--tx3);margin-bottom:16px}
+.item-card{
+  background:var(--cream);border-radius:var(--r);
+  padding:14px 16px;margin-bottom:10px;
+  border-left:3px solid var(--err);
+}
+.item-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.item-type{font-size:11px;font-weight:700;color:var(--err);text-transform:uppercase;letter-spacing:.5px}
+.item-impact{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.impact-alto{background:#FDECEA;color:#C0392B}
+.impact-medio{background:#FEF3E2;color:#B7600A}
+.item-creditor{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:3px}
+.item-details{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.item-detail{font-size:12px;color:var(--tx3)}
+.item-detail span{color:var(--tx1);font-weight:500}
+.item-reason{font-size:12px;color:var(--tx2);line-height:1.5;padding:8px 10px;background:rgba(192,57,43,.06);border-radius:6px}
+
+/* No items */
+.no-items{
+  text-align:center;padding:28px;background:var(--cream);
+  border-radius:var(--r);border:1px solid var(--cream2)
+}
+.no-items-icon{font-size:32px;margin-bottom:8px}
+.no-items-title{font-size:14px;font-weight:600;color:var(--ok);margin-bottom:4px}
+.no-items-sub{font-size:12px;color:var(--tx2)}
+
+/* Summary */
+.summary-box{
+  background:var(--gold3);border-radius:var(--r);
+  padding:14px 16px;margin:16px 0;
+  border:1px solid rgba(200,121,26,.2)
+}
+.summary-title{font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.summary-text{font-size:13px;color:var(--tx1);line-height:1.65}
+
+/* Savings */
+.savings-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.savings-card{background:var(--cream);border-radius:var(--r);padding:14px;text-align:center;border:1px solid var(--cream2)}
+.savings-val{font-family:var(--ff-d);font-size:26px;font-weight:600;color:var(--ok);margin-bottom:3px;line-height:1}
+.savings-label{font-size:11px;color:var(--tx3);line-height:1.3}
+
+/* CTA results */
+.results-ctas{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+.btn-wa-big{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  background:var(--green);color:var(--white);padding:16px;
+  border-radius:11px;font-size:16px;font-weight:700;
+  text-decoration:none;transition:all .2s;
+  box-shadow:0 4px 18px rgba(37,211,102,.28)
+}
+.btn-wa-big:hover{background:var(--green2);transform:translateY(-2px)}
+.btn-secondary-sm{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  background:transparent;color:var(--navy);padding:13px;
+  border-radius:11px;font-size:14px;font-weight:600;
+  border:1.5px solid rgba(12,31,53,.2);transition:all .2s;
+  text-decoration:none;cursor:pointer;font-family:var(--ff-b)
+}
+.btn-secondary-sm:hover{border-color:var(--navy);background:var(--white)}
+.results-trust{text-align:center;font-size:11px;color:var(--tx3);margin-top:10px}
+.results-trust span::before{content:'✓ ';color:var(--ok);font-weight:700}
+
+/* ERROR */
+.error-state{display:none;text-align:center;padding:28px 20px}
+.error-state.show{display:block}
+.error-icon{font-size:36px;margin-bottom:10px}
+.error-title{font-size:16px;font-weight:600;color:var(--err);margin-bottom:6px}
+.error-sub{font-size:13px;color:var(--tx2);margin-bottom:16px}
+.btn-retry{padding:10px 24px;background:var(--navy);color:var(--white);border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--ff-b)}
+
+/* RESPONSIVE */
+@media(max-width:680px){
+  nav{padding:0 20px}
+  .hero{padding:80px 20px 40px}
+  .hero h1{font-size:32px}
+  .main-wrap{padding:0 20px 60px}
+  .form-row{grid-template-columns:1fr}
+  .score-row{flex-direction:column;align-items:flex-start}
+  .score-big{font-size:56px}
+  .savings-grid{grid-template-columns:1fr}
+  .results-header,.results-body{padding:20px}
+  .steps-guide{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-m">M</div> Merito</a>
+  <a href="/" class="back-link">← Volver al inicio</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-pill"><div class="pill-dot"></div>Análisis gratuito con IA</div>
+  <h1>Descubre los <em>errores</em><br>en tu reporte de crédito</h1>
+  <p class="hero-sub">Sube tu reporte y en 60 segundos te decimos exactamente qué está dañando tu score — y qué podemos hacer para arreglarlo.</p>
+
+  <div class="steps-guide">
+    <div class="sg-step">
+      <div class="sg-num">1</div>
+      <div class="sg-text"><strong>Obtén tu reporte</strong>annualcreditreport.com gratis</div>
+    </div>
+    <div class="sg-step">
+      <div class="sg-num">2</div>
+      <div class="sg-text"><strong>Súbelo aquí</strong>PDF en segundos</div>
+    </div>
+    <div class="sg-step">
+      <div class="sg-num">3</div>
+      <div class="sg-text"><strong>Ve tu análisis</strong>Personalizado con IA</div>
+    </div>
+  </div>
+</div>
+
+<div class="main-wrap">
+
+  <!-- UPLOAD CARD -->
+  <div class="step-card active" id="uploadCard">
+    <div class="step-header">
+      <div class="step-num-big">1</div>
+      <div class="step-title-wrap">
+        <div class="step-title">Sube tu reporte de crédito</div>
+        <div class="step-subtitle">PDF de Equifax, Experian o TransUnion</div>
+      </div>
+    </div>
+    <div class="step-body">
+
+      <div class="report-guide">
+        <div class="rg-title">📋 ¿Cómo obtener tu reporte gratis?</div>
+        <div class="rg-steps">
+          <div class="rg-step">
+            <div class="rg-dot">1</div>
+            <div class="rg-text">Ve a <a href="https://www.annualcreditreport.com" target="_blank">annualcreditreport.com</a> — el único sitio oficial autorizado por el gobierno federal</div>
+          </div>
+          <div class="rg-step">
+            <div class="rg-dot">2</div>
+            <div class="rg-text">Click en <strong>"Request Free Credit Reports"</strong> y selecciona cualquiera de los 3 bureaus (Equifax, Experian o TransUnion)</div>
+          </div>
+          <div class="rg-step">
+            <div class="rg-dot">3</div>
+            <div class="rg-text">Descarga el PDF de tu reporte y súbelo aquí abajo — el proceso no afecta tu score</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept=".pdf">
+        <div class="upload-icon">📄</div>
+        <div class="upload-title" id="uploadTitle">Arrastra tu reporte aquí o haz click para seleccionar</div>
+        <div class="upload-sub">Solo archivos PDF · Máximo 10MB</div>
+        <div class="upload-file-name" id="uploadFileName"></div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tu nombre</label>
+          <input type="text" id="nombre" placeholder="Carlos García" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label>WhatsApp (con código de país)</label>
+          <input type="tel" id="whatsapp" placeholder="+1 555 123 4567" autocomplete="tel">
+        </div>
+      </div>
+
+      <label class="consent" id="consentLabel">
+        <input type="checkbox" id="consent">
+        <div class="consent-text">
+          Al subir mi reporte autorizo a Merito a analizarlo con IA. <strong>El documento no se almacena</strong> — solo se guarda el resultado del análisis. Al continuar acepto los <a href="#" style="color:var(--navy)">Términos de Servicio</a> y la <a href="#" style="color:var(--navy)">Política de Privacidad</a>.
+        </div>
+      </label>
+
+      <button class="btn-analyze" id="btnAnalyze" disabled onclick="startAnalysis()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Analizar mi reporte gratis
+      </button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loadingState">
+    <div class="loader"></div>
+    <div class="loading-title">Analizando tu reporte...</div>
+    <div class="loading-steps">
+      <div class="loading-step" id="ls1">Leyendo tu reporte de crédito</div>
+      <div class="loading-step" id="ls2">Identificando ítems disputables</div>
+      <div class="loading-step" id="ls3">Calculando impacto en tu score</div>
+      <div class="loading-step" id="ls4">Generando tu plan personalizado</div>
+    </div>
+    <p style="font-size:12px;color:var(--tx3);margin-top:16px">Esto toma unos 30–60 segundos</p>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-state" id="resultsState">
+
+    <div class="results-header">
+      <div class="rh-greeting" id="rh-greeting">Tu análisis personalizado</div>
+      <div class="rh-title" id="rh-title">Encontramos lo que está afectando tu crédito</div>
+      <div class="score-row">
+        <div class="score-big-wrap">
+          <div class="score-big" id="res-score">—</div>
+          <div class="score-label">Tu score actual</div>
+          <div><span class="score-badge-r" id="res-badge">—</span></div>
+        </div>
+        <div class="projections">
+          <div class="proj-card">
+            <div class="proj-val" id="res-p6">—</div>
+            <div class="proj-label">Score proyectado<br>en 6 meses</div>
+          </div>
+          <div class="proj-card">
+            <div class="proj-val" id="res-p12">—</div>
+            <div class="proj-label">Score proyectado<br>en 12 meses</div>
+          </div>
+          <div class="proj-card">
+            <div class="proj-val" id="res-saving">—</div>
+            <div class="proj-label">Ahorro mensual<br>en intereses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-body">
+
+      <div class="items-title">
+        Ítems disputables encontrados
+        <span class="items-count" id="res-count">0</span>
+      </div>
+      <div class="items-sub">Estos ítems pueden disputarse bajo la ley FCRA</div>
+      <div id="itemsList"></div>
+
+      <div class="summary-box">
+        <div class="summary-title">📊 Resumen del análisis</div>
+        <div class="summary-text" id="res-summary">—</div>
+      </div>
+
+      <div class="savings-grid">
+        <div class="savings-card">
+          <div class="savings-val" id="res-saving2">$0/mes</div>
+          <div class="savings-label">Ahorro potencial en intereses de auto</div>
+        </div>
+        <div class="savings-card">
+          <div class="savings-val" id="res-recomendacion" style="font-size:15px;color:var(--navy)">—</div>
+          <div class="savings-label">Próximo paso recomendado</div>
+        </div>
+      </div>
+
+      <div class="results-ctas">
+        <a href="#" class="btn-wa-big" id="res-wa-btn" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Disputar mis ítems por $49/mes
+        </a>
+        <a href="/" class="btn-secondary-sm">Ver cómo funciona Merito</a>
+        <div class="results-trust">
+          <span>Sin contratos</span>&nbsp;&nbsp;
+          <span>Cancela cuando quieras</span>&nbsp;&nbsp;
+          <span>FCRA compliant</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-state" id="errorState">
+    <div class="error-icon">⚠️</div>
+    <div class="error-title">Algo salió mal</div>
+    <div class="error-sub" id="errorMsg">Hubo un error al analizar tu reporte. Por favor intenta de nuevo.</div>
+    <button class="btn-retry" onclick="resetForm()">Intentar de nuevo</button>
+  </div>
+
+</div>
+
+<script>
+const WORKER_URL = 'https://merito-analyzer.munir-go10.workers.dev/';
+const WA_NUMBER = '524499031441';
+
+let selectedFile = null;
+
+// ── FILE UPLOAD ──
+const fileInput = document.getElementById('fileInput');
+const uploadZone = document.getElementById('uploadZone');
+
+fileInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) handleFile(file);
+});
+
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type === 'application/pdf') handleFile(file);
+});
+
+function handleFile(file) {
+  if (file.type !== 'application/pdf') {
+    alert('Por favor sube solo archivos PDF.');
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    alert('El archivo es muy grande. Máximo 10MB.');
+    return;
+  }
+  selectedFile = file;
+  uploadZone.classList.add('has-file');
+  document.getElementById('uploadTitle').textContent = '¡Archivo listo!';
+  document.getElementById('uploadFileName').textContent = `📄 ${file.name}`;
+  checkForm();
+}
+
+// ── FORM VALIDATION ──
+document.getElementById('nombre').addEventListener('input', checkForm);
+document.getElementById('whatsapp').addEventListener('input', checkForm);
+document.getElementById('consent').addEventListener('change', checkForm);
+
+function checkForm() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+  const consent = document.getElementById('consent').checked;
+  const btn = document.getElementById('btnAnalyze');
+  btn.disabled = !(selectedFile && nombre && whatsapp && consent);
+}
+
+// ── LOADING ANIMATION ──
+function animateLoading() {
+  const steps = ['ls1','ls2','ls3','ls4'];
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i > 0) {
+      document.getElementById(steps[i-1]).classList.remove('current');
+      document.getElementById(steps[i-1]).classList.add('done');
+    }
+    if (i < steps.length) {
+      document.getElementById(steps[i]).classList.add('current');
+      i++;
+    } else {
+      clearInterval(interval);
+    }
+  }, 4000);
+}
+
+// ── MAIN ANALYSIS ──
+async function startAnalysis() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+
+  // Show loading
+  document.getElementById('uploadCard').style.display = 'none';
+  document.getElementById('loadingState').classList.add('show');
+  animateLoading();
+
+  try {
+    // Convert PDF to base64
+    const pdfBase64 = await fileToBase64(selectedFile);
+
+    // Call the Worker
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pdfBase64, nombre, whatsapp })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'Error del servidor');
+    }
+
+    showResults(data);
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('loadingState').classList.remove('show');
+    document.getElementById('errorState').classList.add('show');
+    document.getElementById('errorMsg').textContent = err.message || 'Hubo un error. Intenta de nuevo.';
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── SHOW RESULTS ──
+function showResults(data) {
+  document.getElementById('loadingState').classList.remove('show');
+
+  const a = data.analysis;
+  const nombre = data.nombre;
+
+  // Header
+  document.getElementById('rh-greeting').textContent = `Hola ${nombre}, aquí está tu análisis`;
+  document.getElementById('rh-title').textContent =
+    a.totalItemsDisputables > 0
+      ? `Encontramos ${a.totalItemsDisputables} ítem${a.totalItemsDisputables > 1 ? 's' : ''} que podría${a.totalItemsDisputables > 1 ? 'n' : ''} estar dañando tu score`
+      : 'Tu reporte se ve bien — veamos cómo subir tu score';
+
+  // Score
+  const scoreEl = document.getElementById('res-score');
+  scoreEl.textContent = a.scoreActual || a.score || '—';
+  const score = a.scoreActual || a.score || 0;
+  if (score < 580) { scoreEl.style.color = '#E8961A'; document.getElementById('res-badge').textContent = 'Bajo — podemos ayudarte'; document.getElementById('res-badge').className = 'score-badge-r sb-bad'; }
+  else if (score < 670) { scoreEl.style.color = '#E8961A'; document.getElementById('res-badge').textContent = 'Regular — hay margen de mejora'; document.getElementById('res-badge').className = 'score-badge-r sb-fair'; }
+  else { scoreEl.style.color = '#25D366'; document.getElementById('res-badge').textContent = '¡Bueno! Sigamos subiendo'; document.getElementById('res-badge').className = 'score-badge-r sb-good'; }
+
+  // Projections
+  document.getElementById('res-p6').textContent = a.scoreProyectado6Meses || '—';
+  document.getElementById('res-p12').textContent = a.scoreProyectado12Meses || '—';
+  document.getElementById('res-saving').textContent = a.ahorroMensualAuto || '—';
+  document.getElementById('res-saving2').textContent = a.ahorroMensualAuto || '—';
+
+  // Items
+  document.getElementById('res-count').textContent = a.totalItemsDisputables || 0;
+  const itemsList = document.getElementById('itemsList');
+  itemsList.innerHTML = '';
+
+  if (a.itemsDisputables && a.itemsDisputables.length > 0) {
+    a.itemsDisputables.forEach(item => {
+      itemsList.innerHTML += `
+        <div class="item-card">
+          <div class="item-header">
+            <span class="item-type">${item.tipo || 'Ítem'}</span>
+            <span class="item-impact ${item.impacto === 'Alto' ? 'impact-alto' : 'impact-medio'}">${item.impacto || 'Medio'}</span>
+          </div>
+          <div class="item-creditor">${item.acreedor || 'Acreedor'}</div>
+          <div class="item-details">
+            ${item.monto ? `<div class="item-detail">Monto: <span>${item.monto}</span></div>` : ''}
+            ${item.fecha ? `<div class="item-detail">Fecha: <span>${item.fecha}</span></div>` : ''}
+          </div>
+          <div class="item-reason">💡 ${item.razon || 'Ítem potencialmente disputable bajo FCRA'}</div>
+        </div>`;
+    });
+  } else {
+    itemsList.innerHTML = `
+      <div class="no-items">
+        <div class="no-items-icon">✅</div>
+        <div class="no-items-title">No encontramos errores obvios</div>
+        <div class="no-items-sub">Tu reporte parece limpio. Podemos ayudarte a construir historial positivo y subir tu score más rápido.</div>
+      </div>`;
+  }
+
+  // Summary
+  document.getElementById('res-summary').textContent = a.resumen || 'Análisis completado.';
+  document.getElementById('res-recomendacion').textContent = a.recomendacionPrincipal || 'Contactar a Merito para plan personalizado';
+
+  // WhatsApp CTA with context
+  const waMsg = `Hola, acabo de analizar mi reporte con Merito. Mi nombre es ${nombre} y encontraron ${a.totalItemsDisputables || 0} ítem(s) disputable(s). Mi score actual es ${score}. ¿Cómo empezamos?`;
+  document.getElementById('res-wa-btn').href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg)}`;
+
+  document.getElementById('resultsState').classList.add('show');
+
+  // Scroll to results
+  document.getElementById('resultsState').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetForm() {
+  document.getElementById('errorState').classList.remove('show');
+  document.getElementById('uploadCard').style.display = 'block';
+  selectedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('uploadZone').classList.remove('has-file');
+  document.getElementById('uploadTitle').textContent = 'Arrastra tu reporte aquí o haz click para seleccionar';
+  document.getElementById('uploadFileName').textContent = '';
+  document.getElementById('btnAnalyze').disabled = true;
+  // Reset loading steps
+  ['ls1','ls2','ls3','ls4'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('current','done');
+  });
+}
+</script>
+</body>
+</html>
