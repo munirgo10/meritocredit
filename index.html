@@ -162,14 +162,23 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .r-val.gold{color:var(--gold)}
 .r-key{font-size:10px;color:var(--tx3);line-height:1.35}
 
+.btn-navy{
+  display:inline-flex;align-items:center;gap:8px;background:#E8961A;
+  color:var(--white);padding:14px 24px;border-radius:10px;
+  font-size:15px;font-weight:700;transition:all .2s;border:none;
+  cursor:pointer;font-family:var(--ff-body);
+  box-shadow:0 4px 18px rgba(232,150,26,.35)
+}
+.btn-navy:hover{background:#C8790F;transform:translateY(-2px);box-shadow:0 8px 28px rgba(232,150,26,.4)}
+
 .sim-cta{
-  width:100%;padding:14px;background:var(--green);color:var(--white);
+  width:100%;padding:14px;background:#E8961A;color:var(--white);
   border:none;border-radius:10px;font-size:14px;font-weight:700;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
   gap:8px;transition:all .2s;font-family:var(--ff-body);
-  box-shadow:0 4px 16px rgba(37,211,102,.26)
+  box-shadow:0 4px 16px rgba(232,150,26,.32)
 }
-.sim-cta:hover{background:var(--green2);transform:translateY(-2px)}
+.sim-cta:hover{background:#C8790F;transform:translateY(-2px)}
 .sim-micro{text-align:center;font-size:11px;color:var(--tx3);margin-top:9px}
 
 /* ── TRUST BAR ── */
@@ -390,7 +399,7 @@ footer{background:var(--navy);padding:36px 40px 24px}
       <h1 id="h1">Tu score de <em>hoy</em> no define tu <em>futuro.</em></h1>
       <p class="hero-sub" id="hero-sub">Merito repara tu historial crediticio con <strong>inteligencia artificial</strong> — en español, sin contratos, por <strong>$49 al mes</strong>.</p>
       <div class="cta-group">
-        <a href="/analizar" class="btn-wa">
+        <a href="/analizar" class="btn-navy">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <span id="cta1">Analiza tu crédito gratis</span>
         </a>
