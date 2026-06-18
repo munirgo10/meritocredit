@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publica AI — Crea contenido con IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#2979FF;--brand2:#1565C0;--brand3:#E3F0FF;
+  --green:#76C442;--green3:#EEF7E6;
+  --pink:#E91E8C;--yellow:#FFD600;
+  --ig:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --fb:#1877F2;--tt:#000;
+  --w:#fff;--bg:#F5F5F3;--bg2:#FAFAF8;
+  --t1:#111827;--t2:#374151;--t3:#6B7280;
+  --border:#E5E7EB;--r:12px;--r2:20px;
+  --s1:0 1px 4px rgba(0,0,0,.07);--s2:0 4px 20px rgba(0,0,0,.10);
+}
+*,::before,::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+nav{background:var(--w);border-bottom:1px solid var(--border);height:60px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:var(--s1)}
+.logo{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:800;color:var(--t1);text-decoration:none}
+.logo-dot{width:28px;height:28px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-brand-chip{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:30px;padding:5px 14px 5px 8px;cursor:pointer;transition:.15s;font-size:13px;font-weight:600;color:var(--t2)}
+.nav-brand-chip:hover{border-color:var(--brand);color:var(--brand)}
+.nav-logo-mini{width:26px;height:26px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;overflow:hidden;flex-shrink:0}
+.nav-logo-mini img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+/* ── SCREENS ── */
+.screen{display:none}.screen.active{display:block}
+
+/* ══════════════════════════════
+   SCREEN 1: BRAND SETUP
+══════════════════════════════ */
+.setup-wrap{max-width:680px;margin:0 auto;padding:32px 20px 80px}
+.setup-hero{text-align:center;margin-bottom:32px}
+.setup-icon{font-size:40px;margin-bottom:12px}
+.setup-hero h1{font-size:26px;font-weight:800;margin-bottom:6px}
+.setup-hero p{font-size:14px;color:var(--t3);line-height:1.6}
+
+.setup-card{background:var(--w);border:1px solid var(--border);border-radius:var(--r2);padding:24px;margin-bottom:16px;box-shadow:var(--s1)}
+.sc-title{font-size:13px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;display:flex;align-items:center;gap:7px}
+
+/* Logo upload */
+.logo-upload-row{display:flex;align-items:center;gap:16px}
+.logo-upload-circle{width:72px;height:72px;border-radius:50%;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;background:var(--bg);flex-shrink:0;overflow:hidden;position:relative}
+.logo-upload-circle:hover{border-color:var(--brand);background:var(--brand3)}
+.logo-upload-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.logo-upload-circle .plus{font-size:24px;color:var(--t3)}
+#logoFileInput{position:absolute;inset:0;opacity:0;cursor:pointer}
+.logo-upload-info .title{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:3px}
+.logo-upload-info .sub{font-size:12px;color:var(--t3)}
+
+/* Form grid */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:span 2}
+label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
+input[type=text],textarea,select{padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--t1);background:var(--w);outline:none;transition:border .15s;width:100%}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--brand)}
+input[type=text]::placeholder,textarea::placeholder{color:var(--t3)}
+textarea{resize:vertical;min-height:80px;line-height:1.5}
+select{cursor:pointer}
+
+/* Color pickers */
+.color-row{display:flex;gap:10px}
+.color-pick{display:flex;align-items:center;gap:8px;flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;background:var(--w)}
+.color-pick label{cursor:pointer;font-size:12px;font-weight:600;color:var(--t2);margin:0;text-transform:none;letter-spacing:0}
+input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:pointer;padding:0;background:none}
+
+/* Brand guide section */
+.bg-section{margin-top:14px;display:none}
+.bg-section.show{display:block}
+.bg-label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.bg-textarea{width:100%;min-height:200px;padding:14px;border:1.5px solid var(--border);border-radius:10px;font-size:12px;font-family:inherit;color:var(--t2);line-height:1.7;resize:vertical;outline:none;transition:border .15s}
+.bg-textarea:focus{border-color:var(--brand)}
+.bg-hint{font-size:11px;color:var(--t3);margin-top:6px}
+
+/* Buttons */
+.btn{padding:12px 20px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.15s;font-family:inherit;border:none}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:0 3px 12px rgba(41,121,255,.28)}
+.btn-primary:hover:not(:disabled){background:var(--brand2);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-outline{background:var(--w);color:var(--t1);border:1.5px solid var(--border)}
+.btn-outline:hover{border-color:var(--brand);color:var(--brand)}
+.btn-full{width:100%}
+.btn-ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn-ghost:hover{background:var(--brand3)}
+
+/* Loading spinner inline */
+.spinner-sm{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ══════════════════════════════
+   SCREEN 2: CREATOR
+══════════════════════════════ */
+.creator-wrap{max-width:860px;margin:0 auto;padding:24px 20px 80px}
+
+/* Brand bar */
+.brand-bar{background:var(--w);border:1px solid var(--border);border-radius:var(--r2);padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--s1)}
+.bb-left{display:flex;align-items:center;gap:12px}
+.bb-logo{width:44px;height:44px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;overflow:hidden}
+.bb-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.bb-name{font-size:14px;font-weight:700;color:var(--t1)}
+.bb-desc{font-size:12px;color:var(--t3);margin-top:1px}
+.bb-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.bb-tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;background:var(--brand3);color:var(--brand)}
+.btn-edit{font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;background:var(--bg);border:1px solid var(--border);color:var(--t2);cursor:pointer;transition:.15s}
+.btn-edit:hover{border-color:var(--brand);color:var(--brand);background:var(--brand3)}
+
+/* Platform tabs */
+.platform-tabs{display:flex;gap:8px;margin-bottom:20px}
+.plt-tab{padding:9px 18px;border-radius:10px;border:1.5px solid var(--border);background:var(--w);font-size:13px;font-weight:600;cursor:pointer;color:var(--t3);transition:.15s;display:flex;align-items:center;gap:6px}
+.plt-tab:hover{border-color:var(--brand);color:var(--brand)}
+.plt-tab.active.ig-tab{background:var(--ig);border-color:transparent;color:#fff}
+.plt-tab.active.fb-tab{background:var(--fb);border-color:transparent;color:#fff}
+.plt-tab.active.tt-tab{background:var(--tt);border-color:transparent;color:#fff}
+.plt-info{background:var(--w);border:0.5px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--t3);line-height:1.55;display:none}
+.plt-info.show{display:block}
+
+/* Mode cards */
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.mode-card{background:var(--w);border:2px solid var(--border);border-radius:var(--r2);padding:18px;cursor:pointer;transition:.2s}
+.mode-card:hover{border-color:var(--brand);box-shadow:var(--s2)}
+.mode-card.active{border-color:var(--brand);background:var(--brand3)}
+.mc-icon{font-size:24px;margin-bottom:8px}
+.mc-title{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:3px}
+.mc-desc{font-size:12px;color:var(--t3);line-height:1.4}
+.mode-card.active .mc-title{color:var(--brand2)}
+
+/* Input card */
+.input-card{background:var(--w);border:1px solid var(--border);border-radius:var(--r2);padding:20px;box-shadow:var(--s1);margin-bottom:16px}
+.ic-label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:9px}
+.text-ta{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--t1);resize:vertical;min-height:100px;outline:none;transition:border .15s;line-height:1.5}
+.text-ta:focus{border-color:var(--brand)}
+.text-ta::placeholder{color:var(--t3)}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;transition:.2s;background:var(--bg);position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--brand);background:var(--brand3)}
+.upload-zone.has-file{border-style:solid;border-color:var(--green);background:var(--green3)}
+.uz-icon{font-size:30px;margin-bottom:8px}
+.uz-title{font-size:13px;font-weight:600;color:var(--t2);margin-bottom:3px}
+.uz-sub{font-size:12px;color:var(--t3)}
+.uz-name{font-size:12px;font-weight:600;color:var(--green);margin-top:5px}
+#fileInput{position:absolute;inset:0;opacity:0;cursor:pointer}
+.photo-preview-img{width:100%;max-height:180px;border-radius:8px;object-fit:cover;display:none;margin-top:12px}
+.photo-preview-img.show{display:block}
+.btn-generate{width:100%;padding:14px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s;font-family:inherit;margin-top:14px;box-shadow:0 3px 14px rgba(41,121,255,.3)}
+.btn-generate:hover:not(:disabled){background:var(--brand2);transform:translateY(-1px)}
+.btn-generate:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Loading */
+.loading-wrap{display:none;text-align:center;padding:48px 16px}
+.loading-wrap.show{display:block}
+.spinner-lg{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+.loading-title{font-size:17px;font-weight:700;margin-bottom:6px}
+.loading-steps{font-size:13px;color:var(--t3);line-height:2.2}
+.ls{opacity:.3;transition:.4s}
+.ls.on{opacity:1;font-weight:700;color:var(--brand)}
+.ls.done{opacity:.6}
+.ls.done::after{content:' ✓';color:var(--green)}
+
+/* Results */
+.result-wrap{display:none}
+.result-wrap.show{display:block}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* Image panel */
+.img-panel{background:var(--w);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:var(--s2)}
+.img-panel img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.img-panel .photo-desc{padding:10px 14px;background:var(--green3);font-size:12px;color:var(--green);border-top:1px solid rgba(118,196,66,.2);line-height:1.5;display:none}
+.img-panel .photo-desc.show{display:block}
+.dl-section{padding:12px 14px;border-top:1px solid var(--border)}
+.dl-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.dl-btns{display:flex;gap:6px}
+.btn-dl{flex:1;padding:7px;border:1px solid var(--border);border-radius:7px;background:var(--w);font-size:11px;font-weight:700;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:4px;color:var(--t2)}
+.btn-dl:hover{border-color:var(--brand);color:var(--brand);background:var(--brand3)}
+
+/* Caption panel */
+.caption-panel{display:flex;flex-direction:column;gap:10px}
+.cap-type{background:var(--w);border:1px solid var(--border);border-radius:10px;padding:12px 14px;box-shadow:var(--s1)}
+.ct-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ct-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
+.btn-cp{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--border);color:var(--t2);cursor:pointer;transition:.15s}
+.btn-cp:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn-cp.ok{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* Platform caption tabs */
+.cap-tabs{background:var(--w);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:var(--s1)}
+.cap-tab-btns{display:flex;border-bottom:1px solid var(--border)}
+.cap-tab-btn{flex:1;padding:10px;font-size:12px;font-weight:700;border:none;background:transparent;cursor:pointer;color:var(--t3);transition:.15s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.cap-tab-btn.active{color:var(--brand);border-bottom-color:var(--brand);background:var(--brand3)}
+.cap-tab-panel{padding:14px;display:none}
+.cap-tab-panel.active{display:block}
+.cap-text{font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:8px;white-space:pre-wrap}
+.cap-hashtags{font-size:12px;color:var(--brand);margin-bottom:8px;line-height:1.8}
+.cap-cta{font-size:12px;font-weight:600;color:var(--t1);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.tiktok-script{background:var(--bg);border-radius:8px;padding:10px;margin-top:8px;display:none}
+.tiktok-script.show{display:block}
+.ts-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.ts-hook{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.ts-script{font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap}
+.cap-copy-row{display:flex;gap:6px}
+
+/* Actions */
+.result-actions{display:flex;gap:10px;margin-top:4px}
+
+/* Error */
+.error-wrap{display:none;text-align:center;padding:40px 16px}
+.error-wrap.show{display:block}
+
+/* Responsive */
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:span 1}
+  .mode-cards,.result-grid{grid-template-columns:1fr}
+  .platform-tabs{flex-wrap:wrap}
+  .dl-btns{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo" onclick="return false">
+    <div class="logo-dot">P</div>
+    Publica AI
+  </a>
+  <div class="nav-right">
+    <div class="nav-brand-chip" id="navBrandChip" onclick="goToEdit()" style="display:none">
+      <div class="nav-logo-mini" id="navLogoMini">?</div>
+      <span id="navBrandName">Mi marca</span>
+      <span>✏️</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 1: BRAND SETUP
+══════════════════════════════════════════ -->
+<div id="setupScreen" class="screen active">
+  <div class="setup-wrap">
+    <div class="setup-hero">
+      <div class="setup-icon">✨</div>
+      <h1>Configura tu marca</h1>
+      <p>Esta información define el estilo, voz y personalidad de todo el contenido que creará la AI. Solo lo haces una vez.</p>
+    </div>
+
+    <!-- LOGO + NOMBRE -->
+    <div class="setup-card">
+      <div class="sc-title">🏪 Tu negocio</div>
+      <div class="logo-upload-row" style="margin-bottom:16px">
+        <div class="logo-upload-circle" id="logoCircle" onclick="document.getElementById('logoFileInput').click()">
+          <input type="file" id="logoFileInput" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer">
+          <img id="logoPreviewImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%">
+          <span class="plus" id="logoPlus">+</span>
+        </div>
+        <div class="logo-upload-info">
+          <div class="title">Logo del negocio</div>
+          <div class="sub">Se mostrará en el Brand Bar y se añadirá en las imágenes generadas</div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre del negocio *</label>
+          <input type="text" id="bName" placeholder="Ej: Wonderik Preschool">
+        </div>
+        <div class="form-group">
+          <label>Tipo de negocio *</label>
+          <input type="text" id="bType" placeholder="Ej: Kinder privado con neurociencia">
+        </div>
+        <div class="form-group">
+          <label>Ciudad / País *</label>
+          <input type="text" id="bLocation" placeholder="Ej: Aguascalientes, México">
+        </div>
+        <div class="form-group">
+          <label>Tono de comunicación</label>
+          <select id="bTone">
+            <option value="Cálido, moderno y cercano">Cálido y moderno</option>
+            <option value="Profesional y confiable">Profesional y confiable</option>
+            <option value="Divertido y energético">Divertido y energético</option>
+            <option value="Inspiracional y motivador">Inspiracional y motivador</option>
+            <option value="Informativo y educativo">Informativo y educativo</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>¿Qué te hace diferente? (Diferenciador clave) *</label>
+          <input type="text" id="bDiff" placeholder="Ej: Integramos Neurociencias + Psicología en educación inicial">
+        </div>
+        <div class="form-group full">
+          <label>¿A quién le hablas? (Audiencia objetivo) *</label>
+          <textarea id="bAudience" rows="2" placeholder="Ej: Papás y mamás de 28-40 años, nivel medio-alto, que buscan la mejor educación para sus hijos de 1-5 años en Aguascalientes"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLORES -->
+    <div class="setup-card">
+      <div class="sc-title">🎨 Colores de marca</div>
+      <div class="color-row">
+        <div class="color-pick">
+          <input type="color" id="bColor1" value="#2979FF">
+          <label for="bColor1">Color primario</label>
+        </div>
+        <div class="color-pick">
+          <input type="color" id="bColor2" value="#76C442">
+          <label for="bColor2">Color secundario</label>
+        </div>
+        <div class="color-pick">
+          <input type="color" id="bColor3" value="#E91E8C">
+          <label for="bColor3">Color acento</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI BRAND GUIDE -->
+    <div class="setup-card">
+      <div class="sc-title">🤖 Brand Guide con AI</div>
+      <p style="font-size:13px;color:var(--t3);margin-bottom:14px;line-height:1.6">La AI analizará tu negocio y generará un Brand Guide completo: pilares de contenido, estrategia por plataforma, voz de marca y más. Puedes editarlo antes de guardar.</p>
+      <button class="btn btn-primary btn-full" id="btnGenerateBG" onclick="generateBrandGuide()">
+        ✨ Generar Brand Guide con AI
+      </button>
+      <div class="bg-section" id="bgSection">
+        <div class="bg-label" style="margin-top:16px">📋 Brand Guide generado — puedes editarlo</div>
+        <textarea class="bg-textarea" id="bgTextarea" rows="14" placeholder="El Brand Guide aparecerá aquí..."></textarea>
+        <div class="bg-hint">💡 Este texto es el "cerebro" de la AI. Edita cualquier cosa que quieras ajustar antes de guardar.</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full" id="btnSaveBrand" onclick="saveBrand()" disabled style="padding:16px;font-size:15px">
+      Guardar y empezar a crear →
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 2: CREATOR
+══════════════════════════════════════════ -->
+<div id="creatorScreen" class="screen">
+  <div class="creator-wrap">
+
+    <!-- Brand Bar -->
+    <div class="brand-bar">
+      <div class="bb-left">
+        <div class="bb-logo" id="bbLogo">P</div>
+        <div>
+          <div class="bb-name" id="bbName">Mi negocio</div>
+          <div class="bb-desc" id="bbDesc">—</div>
+          <div class="bb-tags" id="bbTags"></div>
+        </div>
+      </div>
+      <button class="btn-edit" onclick="goToEdit()">✏️ Editar marca</button>
+    </div>
+
+    <!-- Platform selector -->
+    <div class="platform-tabs">
+      <button class="plt-tab ig-tab active" data-plt="instagram" onclick="setPlatform(this)">📸 Instagram</button>
+      <button class="plt-tab fb-tab" data-plt="facebook" onclick="setPlatform(this)">👥 Facebook</button>
+      <button class="plt-tab tt-tab" data-plt="tiktok" onclick="setPlatform(this)">🎵 TikTok</button>
+    </div>
+    <div class="plt-info show" id="pltInfo">
+      📸 <strong>Instagram 2026:</strong> Keywords en caption, hook en primera línea, 3-5 hashtags. Objetivo: Guardados + compartidos por DM.
+    </div>
+
+    <!-- Mode cards -->
+    <div class="mode-cards">
+      <div class="mode-card active" id="mCard1" onclick="setMode('text')">
+        <div class="mc-icon">✍️</div>
+        <div class="mc-title">Crear desde texto</div>
+        <div class="mc-desc">Describe lo que quieres publicar y la AI genera imagen, caption y hashtags optimizados.</div>
+      </div>
+      <div class="mode-card" id="mCard2" onclick="setMode('photo')">
+        <div class="mc-icon">📸</div>
+        <div class="mc-title">Mejorar una foto</div>
+        <div class="mc-desc">Sube una foto real de tu negocio y la AI genera el caption perfecto e imagen complementaria.</div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-card" id="inputCard">
+      <div id="textModeInput">
+        <div class="ic-label">¿Qué quieres publicar?</div>
+        <textarea class="text-ta" id="textInput" placeholder="Ej: Un post sobre nuestra actividad de ciencias donde los niños mezclaron colores y aprendieron sobre el cerebro..."></textarea>
+        <p style="font-size:11px;color:var(--t3);margin-top:7px">💡 Entre más detalle des, mejor será el resultado</p>
+      </div>
+      <div id="photoModeInput" style="display:none">
+        <div class="ic-label">Sube una foto de tu negocio</div>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" accept="image/*">
+          <div class="uz-icon">🖼️</div>
+          <div class="uz-title" id="uzTitle">Arrastra tu foto o haz click</div>
+          <div class="uz-sub">JPG, PNG · Máx 10MB</div>
+          <div class="uz-name" id="uzName"></div>
+        </div>
+        <img id="photoPreviewImg" class="photo-preview-img" src="" alt="">
+      </div>
+      <button class="btn-generate" id="btnGenerate" onclick="generate()">
+        ✨ Generar contenido con AI
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-wrap" id="loadingWrap">
+      <div class="spinner-lg"></div>
+      <div class="loading-title">Creando tu contenido...</div>
+      <div class="loading-steps">
+        <div class="ls" id="ls1">Analizando tu solicitud</div>
+        <div class="ls" id="ls2">Generando 3 captions optimizados</div>
+        <div class="ls" id="ls3">Creando imagen con DALL-E 3</div>
+        <div class="ls" id="ls4">Optimizando por plataforma</div>
+      </div>
+      <p style="font-size:12px;color:var(--t3);margin-top:12px">30–60 segundos · La imagen tarda un poco más</p>
+    </div>
+
+    <!-- Error -->
+    <div class="error-wrap" id="errorWrap">
+      <div style="font-size:36px;margin-bottom:10px">⚠️</div>
+      <div style="font-size:15px;font-weight:700;color:#C0392B;margin-bottom:6px">Algo salió mal</div>
+      <div style="font-size:13px;color:var(--t3);margin-bottom:14px" id="errorMsg">Hubo un error. Intenta de nuevo.</div>
+      <button class="btn btn-outline" onclick="resetCreator()">Intentar de nuevo</button>
+    </div>
+
+    <!-- Results -->
+    <div class="result-wrap" id="resultWrap">
+      <div class="result-grid">
+
+        <!-- Left: Image + downloads -->
+        <div class="img-panel">
+          <img id="resultImg" src="" alt="Imagen generada">
+          <div class="photo-desc" id="photoDesc"></div>
+          <div class="dl-section">
+            <div class="dl-label">⬇ Descargar imagen</div>
+            <div class="dl-btns">
+              <button class="btn-dl" onclick="downloadImage('square')">1:1<br><span style="font-weight:400;font-size:10px">Facebook</span></button>
+              <button class="btn-dl" onclick="downloadImage('portrait')">4:5<br><span style="font-weight:400;font-size:10px">IG Feed</span></button>
+              <button class="btn-dl" onclick="downloadImage('story')">9:16<br><span style="font-weight:400;font-size:10px">Stories</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Platform captions -->
+        <div class="cap-tabs">
+          <div class="cap-tab-btns">
+            <button class="cap-tab-btn active" onclick="showCapTab('ig',this)">📸 IG</button>
+            <button class="cap-tab-btn" onclick="showCapTab('fb',this)">👥 FB</button>
+            <button class="cap-tab-btn" onclick="showCapTab('tt',this)">🎵 TK</button>
+          </div>
+
+          <!-- Instagram -->
+          <div class="cap-tab-panel active" id="capIG">
+            <div class="cap-text" id="igCaption"></div>
+            <div class="cap-hashtags" id="igHashtags"></div>
+            <div class="cap-cta">🎯 <span id="igCta"></span></div>
+            <div class="cap-copy-row">
+              <button class="btn btn-ghost btn-full" style="font-size:12px;padding:8px" onclick="copyCaption('ig',this)">📋 Copiar para Instagram</button>
+            </div>
+          </div>
+
+          <!-- Facebook -->
+          <div class="cap-tab-panel" id="capFB">
+            <div class="cap-text" id="fbCaption"></div>
+            <div class="cap-hashtags" id="fbHashtags"></div>
+            <div class="cap-cta">🎯 <span id="fbCta"></span></div>
+            <div class="cap-copy-row">
+              <button class="btn btn-ghost btn-full" style="font-size:12px;padding:8px" onclick="copyCaption('fb',this)">📋 Copiar para Facebook</button>
+            </div>
+          </div>
+
+          <!-- TikTok -->
+          <div class="cap-tab-panel" id="capTT">
+            <div class="cap-text" id="ttCaption"></div>
+            <div class="cap-hashtags" id="ttHashtags"></div>
+            <div class="tiktok-script show">
+              <div class="ts-label">🎬 Hook (primeros 1.5 seg)</div>
+              <div class="ts-hook" id="ttHook"></div>
+              <div class="ts-label" style="margin-top:8px">📝 Script del video</div>
+              <div class="ts-script" id="ttScript"></div>
+            </div>
+            <div class="cap-copy-row" style="margin-top:10px">
+              <button class="btn btn-ghost btn-full" style="font-size:12px;padding:8px" onclick="copyCaption('tt',this)">📋 Copiar para TikTok</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn btn-outline" style="flex:1" onclick="resetCreator()">← Crear otro post</button>
+        <button class="btn btn-primary" style="flex:1" onclick="copyAllContent()">📋 Copiar todo</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────
+const WORKER = 'https://publica-content.munir-go10.workers.dev/';
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let mode = 'text';
+let platform = 'instagram';
+let selectedFile = null;
+let logoBase64 = null;
+let resultData = null;
+const STORE_KEY = 'publica_brand_v1';
+
+const PLATFORM_INFO = {
+  instagram: '📸 <strong>Instagram 2026:</strong> Keywords en caption, hook en primera línea, 3-5 hashtags. Objetivo: Guardados + compartidos por DM.',
+  facebook:  '👥 <strong>Facebook 2026:</strong> Preguntas y conversación, CTAs de comentarios. Objetivo: Respuestas y debates en comentarios.',
+  tiktok:    '🎵 <strong>TikTok 2026:</strong> Caption corto con keywords SEO (es motor de búsqueda), hook en 1.5 seg. Objetivo: Completion rate 70%+'
+};
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = loadBrand();
+  if (saved) {
+    applyBrand(saved);
+    showScreen('creatorScreen');
+    showNavChip(saved);
+  } else {
+    showScreen('setupScreen');
+  }
+  setupLogoUpload();
+  setupFileUpload();
+});
+
+// ── SCREENS ───────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── BRAND SETUP ───────────────────────────────────────────────────────────
+function setupLogoUpload() {
+  const input = document.getElementById('logoFileInput');
+  input.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      logoBase64 = ev.target.result;
+      document.getElementById('logoPreviewImg').src = logoBase64;
+      document.getElementById('logoPreviewImg').style.display = 'block';
+      document.getElementById('logoPlus').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function generateBrandGuide() {
+  const name = document.getElementById('bName').value.trim();
+  const type = document.getElementById('bType').value.trim();
+  const diff = document.getElementById('bDiff').value.trim();
+  const audience = document.getElementById('bAudience').value.trim();
+  if (!name || !diff || !audience) {
+    alert('Por favor completa al menos: Nombre, Diferenciador y Audiencia.');
+    return;
+  }
+  const btn = document.getElementById('btnGenerateBG');
+  btn.innerHTML = '<div class="spinner-sm"></div> Generando Brand Guide...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'brand-guide',
+        brandData: {
+          name, type,
+          location: document.getElementById('bLocation').value.trim(),
+          differentiator: diff,
+          audience,
+          tone: document.getElementById('bTone').value,
+          colors: {
+            primary: document.getElementById('bColor1').value,
+            secondary: document.getElementById('bColor2').value,
+            accent: document.getElementById('bColor3').value
+          }
+        }
+      })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Error');
+    document.getElementById('bgTextarea').value = data.brandGuide;
+    document.getElementById('bgSection').classList.add('show');
+    document.getElementById('btnSaveBrand').disabled = false;
+    btn.innerHTML = '✅ Brand Guide generado — revisa y edita si quieres';
+    btn.style.background = 'var(--green)';
+  } catch (err) {
+    btn.innerHTML = '✨ Generar Brand Guide con AI';
+    btn.disabled = false;
+    alert('Error: ' + err.message);
+  }
+}
+
+function saveBrand() {
+  const brandData = {
+    name: document.getElementById('bName').value.trim(),
+    type: document.getElementById('bType').value.trim(),
+    location: document.getElementById('bLocation').value.trim(),
+    differentiator: document.getElementById('bDiff').value.trim(),
+    audience: document.getElementById('bAudience').value.trim(),
+    tone: document.getElementById('bTone').value,
+    colors: {
+      primary: document.getElementById('bColor1').value,
+      secondary: document.getElementById('bColor2').value,
+      accent: document.getElementById('bColor3').value
+    },
+    brandGuide: document.getElementById('bgTextarea').value,
+    logo: logoBase64
+  };
+  localStorage.setItem(STORE_KEY, JSON.stringify(brandData));
+  applyBrand(brandData);
+  showNavChip(brandData);
+  showScreen('creatorScreen');
+}
+
+function loadBrand() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)); }
+  catch { return null; }
+}
+
+function applyBrand(b) {
+  // Brand bar
+  document.getElementById('bbName').textContent = b.name;
+  document.getElementById('bbDesc').textContent = b.location || b.type;
+  const tags = document.getElementById('bbTags');
+  tags.innerHTML = '';
+  if (b.differentiator) {
+    const t = document.createElement('span');
+    t.className = 'bb-tag';
+    t.textContent = b.differentiator.slice(0, 40) + (b.differentiator.length > 40 ? '...' : '');
+    tags.appendChild(t);
+  }
+  // Logo
+  const bbLogo = document.getElementById('bbLogo');
+  if (b.logo) {
+    bbLogo.innerHTML = `<img src="${b.logo}" alt="">`;
+  } else {
+    bbLogo.textContent = b.name.charAt(0).toUpperCase();
+  }
+}
+
+function showNavChip(b) {
+  const chip = document.getElementById('navBrandChip');
+  chip.style.display = 'flex';
+  document.getElementById('navBrandName').textContent = b.name;
+  const miniLogo = document.getElementById('navLogoMini');
+  if (b.logo) {
+    miniLogo.innerHTML = `<img src="${b.logo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    miniLogo.textContent = b.name.charAt(0).toUpperCase();
+  }
+}
+
+function goToEdit() {
+  const b = loadBrand();
+  if (b) {
+    document.getElementById('bName').value = b.name || '';
+    document.getElementById('bType').value = b.type || '';
+    document.getElementById('bLocation').value = b.location || '';
+    document.getElementById('bDiff').value = b.differentiator || '';
+    document.getElementById('bAudience').value = b.audience || '';
+    document.getElementById('bTone').value = b.tone || 'Cálido, moderno y cercano';
+    if (b.colors) {
+      document.getElementById('bColor1').value = b.colors.primary || '#2979FF';
+      document.getElementById('bColor2').value = b.colors.secondary || '#76C442';
+      document.getElementById('bColor3').value = b.colors.accent || '#E91E8C';
+    }
+    if (b.brandGuide) {
+      document.getElementById('bgTextarea').value = b.brandGuide;
+      document.getElementById('bgSection').classList.add('show');
+      document.getElementById('btnSaveBrand').disabled = false;
+      const btn = document.getElementById('btnGenerateBG');
+      btn.innerHTML = '✅ Brand Guide cargado — puedes regenerar si quieres';
+      btn.style.background = 'var(--green)';
+    }
+    if (b.logo) {
+      logoBase64 = b.logo;
+      document.getElementById('logoPreviewImg').src = b.logo;
+      document.getElementById('logoPreviewImg').style.display = 'block';
+      document.getElementById('logoPlus').style.display = 'none';
+    }
+  }
+  showScreen('setupScreen');
+}
+
+// ── PLATFORM ──────────────────────────────────────────────────────────────
+function setPlatform(btn) {
+  document.querySelectorAll('.plt-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  platform = btn.dataset.plt;
+  document.getElementById('pltInfo').innerHTML = PLATFORM_INFO[platform];
+}
+
+// ── MODE ──────────────────────────────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.getElementById('mCard1').classList.toggle('active', m === 'text');
+  document.getElementById('mCard2').classList.toggle('active', m === 'photo');
+  document.getElementById('textModeInput').style.display = m === 'text' ? 'block' : 'none';
+  document.getElementById('photoModeInput').style.display = m === 'photo' ? 'block' : 'none';
+}
+
+// ── FILE UPLOAD ───────────────────────────────────────────────────────────
+function setupFileUpload() {
+  const zone = document.getElementById('uploadZone');
+  const input = document.getElementById('fileInput');
+  input.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+}
+
+function handleFile(file) {
+  if (!file.type.startsWith('image/')) { alert('Solo imágenes.'); return; }
+  if (file.size > 10*1024*1024) { alert('Máximo 10MB.'); return; }
+  selectedFile = file;
+  document.getElementById('uploadZone').classList.add('has-file');
+  document.getElementById('uzTitle').textContent = '¡Foto lista!';
+  document.getElementById('uzName').textContent = '📷 ' + file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('photoPreviewImg');
+    img.src = e.target.result;
+    img.classList.add('show');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── GENERATE ──────────────────────────────────────────────────────────────
+async function generate() {
+  const brand = loadBrand();
+  if (!brand) { alert('Primero configura tu marca.'); return; }
+
+  if (mode === 'text' && !document.getElementById('textInput').value.trim()) {
+    alert('Escribe qué quieres publicar.'); return;
+  }
+  if (mode === 'photo' && !selectedFile) {
+    alert('Sube una foto primero.'); return;
+  }
+
+  // Hide input, show loading
+  document.getElementById('inputCard').style.display = 'none';
+  document.querySelector('.mode-cards').style.display = 'none';
+  document.getElementById('loadingWrap').classList.add('show');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('errorWrap').classList.remove('show');
+  animateLoading();
+
+  try {
+    const body = {
+      mode,
+      platform,
+      brandGuide: brand.brandGuide || `Negocio: ${brand.name}. Diferenciador: ${brand.differentiator}. Audiencia: ${brand.audience}. Tono: ${brand.tone}.`
+    };
+    if (mode === 'text') {
+      body.textInput = document.getElementById('textInput').value.trim();
+    } else {
+      body.imageBase64 = await fileToBase64(selectedFile);
+      body.imageType = selectedFile.type;
+    }
+    const res = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Error del servidor');
+    resultData = data;
+    showResult(data);
+  } catch (err) {
+    document.getElementById('loadingWrap').classList.remove('show');
+    document.getElementById('errorWrap').classList.add('show');
+    document.getElementById('errorMsg').textContent = err.message;
+  }
+}
+
+function animateLoading() {
+  const steps = ['ls1','ls2','ls3','ls4'];
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i > 0) { document.getElementById(steps[i-1]).classList.remove('on'); document.getElementById(steps[i-1]).classList.add('done'); }
+    if (i < steps.length) { document.getElementById(steps[i]).classList.add('on'); i++; }
+    else clearInterval(iv);
+  }, 6000);
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// ── SHOW RESULT ───────────────────────────────────────────────────────────
+function showResult(data) {
+  document.getElementById('loadingWrap').classList.remove('show');
+
+  // Image
+  document.getElementById('resultImg').src = data.imageUrl;
+
+  // Photo description
+  if (data.photoDescription) {
+    const pd = document.getElementById('photoDesc');
+    pd.textContent = '📷 ' + data.photoDescription;
+    pd.classList.add('show');
+  }
+
+  // Instagram
+  const ig = data.instagram || {};
+  document.getElementById('igCaption').textContent = ig.caption || '';
+  document.getElementById('igHashtags').textContent = ig.hashtags || '';
+  document.getElementById('igCta').textContent = ig.cta || '';
+
+  // Facebook
+  const fb = data.facebook || {};
+  document.getElementById('fbCaption').textContent = fb.caption || '';
+  document.getElementById('fbHashtags').textContent = fb.hashtags || '';
+  document.getElementById('fbCta').textContent = fb.cta || '';
+
+  // TikTok
+  const tt = data.tiktok || {};
+  document.getElementById('ttCaption').textContent = tt.caption || '';
+  document.getElementById('ttHashtags').textContent = tt.hashtags || '';
+  document.getElementById('ttHook').textContent = tt.hook || '';
+  document.getElementById('ttScript').textContent = tt.script || '';
+
+  // Auto-select the current platform tab
+  const tabMap = { instagram: 'ig', facebook: 'fb', tiktok: 'tt' };
+  const tabBtns = document.querySelectorAll('.cap-tab-btn');
+  tabBtns.forEach((b, i) => {
+    const panels = ['ig','fb','tt'];
+    const isActive = panels[i] === tabMap[platform];
+    b.classList.toggle('active', isActive);
+    document.getElementById('cap' + panels[i].toUpperCase()).classList.toggle('active', isActive);
+  });
+
+  document.getElementById('resultWrap').classList.add('show');
+  document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── CAPTION TABS ──────────────────────────────────────────────────────────
+function showCapTab(tab, btn) {
+  document.querySelectorAll('.cap-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.cap-tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cap' + tab.toUpperCase()).classList.add('active');
+}
+
+// ── COPY ──────────────────────────────────────────────────────────────────
+function copyCaption(plat, btn) {
+  const map = { ig: 'igCaption', fb: 'fbCaption', tt: 'ttCaption' };
+  const hashMap = { ig: 'igHashtags', fb: 'fbHashtags', tt: 'ttHashtags' };
+  const cap = document.getElementById(map[plat]).textContent;
+  const hash = document.getElementById(hashMap[plat]).textContent;
+  navigator.clipboard.writeText(cap + '\n\n' + hash).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ ¡Copiado!';
+    btn.style.background = 'var(--green)';
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+      btn.style.borderColor = '';
+      btn.style.color = '';
+    }, 2500);
+  });
+}
+
+function copyAllContent() {
+  if (!resultData) return;
+  const ig = resultData.instagram || {};
+  const fb = resultData.facebook || {};
+  const tt = resultData.tiktok || {};
+  const all = `📸 INSTAGRAM:\n${ig.caption}\n${ig.hashtags}\n\n👥 FACEBOOK:\n${fb.caption}\n${fb.hashtags}\n\n🎵 TIKTOK:\n${tt.caption}\n${tt.hashtags}\nHook: ${tt.hook}`;
+  navigator.clipboard.writeText(all).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ ¡Todo copiado!';
+    setTimeout(() => btn.textContent = '📋 Copiar todo', 2500);
+  });
+}
+
+// ── CANVAS DOWNLOAD ───────────────────────────────────────────────────────
+async function downloadImage(format) {
+  const imgEl = document.getElementById('resultImg');
+  if (!imgEl.src) return;
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = await loadImg(imgEl.src);
+  const brand = loadBrand();
+  const primaryColor = brand?.colors?.primary || '#2979FF';
+
+  if (format === 'square') {
+    // 1:1 — 1080×1080
+    canvas.width = 1080; canvas.height = 1080;
+    ctx.drawImage(img, 0, 0, 1080, 1080);
+  } else if (format === 'portrait') {
+    // 4:5 — 1080×1350
+    canvas.width = 1080; canvas.height = 1350;
+    ctx.fillStyle = primaryColor;
+    ctx.fillRect(0, 0, 1080, 1350);
+    ctx.drawImage(img, 0, 135, 1080, 1080);
+  } else if (format === 'story') {
+    // 9:16 — 1080×1920
+    canvas.width = 1080; canvas.height = 1920;
+    // Gradient background
+    const grad = ctx.createLinearGradient(0, 0, 0, 1920);
+    grad.addColorStop(0, primaryColor);
+    grad.addColorStop(1, darkenColor(primaryColor, 40));
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 1080, 1920);
+    // Image centered
+    ctx.drawImage(img, 0, 420, 1080, 1080);
+    // Brand name at bottom
+    if (brand?.name) {
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.font = 'bold 36px Plus Jakarta Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(brand.name, 540, 1640);
+    }
+  }
+
+  // Logo overlay (bottom right)
+  if (brand?.logo) {
+    try {
+      const logo = await loadImg(brand.logo);
+      const sz = Math.round(canvas.width * 0.14);
+      const x = canvas.width - sz - 24;
+      const y = canvas.height - sz - 24;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(x + sz/2, y + sz/2, sz/2 + 5, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + sz/2, y + sz/2, sz/2, 0, Math.PI*2);
+      ctx.clip();
+      ctx.drawImage(logo, x, y, sz, sz);
+      ctx.restore();
+    } catch (e) { console.warn('Logo overlay failed:', e); }
+  }
+
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `post-${format}-${Date.now()}.jpg`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/jpeg', 0.93);
+}
+
+function loadImg(src) {
+  return new Promise((resolve, reject) => {
+    const i = new Image();
+    i.crossOrigin = 'anonymous';
+    i.onload = () => resolve(i);
+    i.onerror = reject;
+    i.src = src;
+  });
+}
+
+function darkenColor(hex, amount) {
+  const num = parseInt(hex.replace('#',''), 16);
+  const r = Math.max(0, (num >> 16) - amount);
+  const g = Math.max(0, ((num >> 8) & 0xff) - amount);
+  const b = Math.max(0, (num & 0xff) - amount);
+  return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+// ── RESET ─────────────────────────────────────────────────────────────────
+function resetCreator() {
+  document.getElementById('inputCard').style.display = 'block';
+  document.querySelector('.mode-cards').style.display = 'grid';
+  document.getElementById('loadingWrap').classList.remove('show');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('errorWrap').classList.remove('show');
+  document.getElementById('textInput').value = '';
+  selectedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('uploadZone').classList.remove('has-file');
+  document.getElementById('uzTitle').textContent = 'Arrastra tu foto o haz click';
+  document.getElementById('uzName').textContent = '';
+  document.getElementById('photoPreviewImg').classList.remove('show');
+  document.getElementById('photoDesc').classList.remove('show');
+  document.getElementById('btnGenerate').disabled = false;
+  ['ls1','ls2','ls3','ls4'].forEach(id => document.getElementById(id).className = 'ls');
+  resultData = null;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
