@@ -254,11 +254,12 @@ input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:po
     <div class="setup-card">
       <div class="sc-title">🏪 Tu negocio</div>
       <div class="logo-upload-row" style="margin-bottom:16px">
-        <div class="logo-upload-circle" id="logoCircle" onclick="document.getElementById('logoFileInput').click()">
-          <input type="file" id="logoFileInput" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer">
+        <!-- FIX: label wrapping input eliminates double-trigger -->
+        <label class="logo-upload-circle" for="logoFileInput" style="cursor:pointer">
+          <input type="file" id="logoFileInput" accept="image/*" style="display:none">
           <img id="logoPreviewImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%">
           <span class="plus" id="logoPlus">+</span>
-        </div>
+        </label>
         <div class="logo-upload-info">
           <div class="title">Logo del negocio</div>
           <div class="sub">Se mostrará en el Brand Bar y se añadirá en las imágenes generadas</div>
@@ -274,8 +275,30 @@ input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:po
           <input type="text" id="bType" placeholder="Ej: Kinder privado con neurociencia">
         </div>
         <div class="form-group">
-          <label>Ciudad / País *</label>
-          <input type="text" id="bLocation" placeholder="Ej: Aguascalientes, México">
+          <label>País *</label>
+          <select id="bCountry" onchange="updateStates()">
+            <option value="">— Selecciona tu país —</option>
+            <option value="México">🇲🇽 México</option>
+            <option value="Estados Unidos">🇺🇸 Estados Unidos</option>
+            <option value="Colombia">🇨🇴 Colombia</option>
+            <option value="Argentina">🇦🇷 Argentina</option>
+            <option value="Chile">🇨🇱 Chile</option>
+            <option value="Perú">🇵🇪 Perú</option>
+            <option value="España">🇪🇸 España</option>
+            <option value="Guatemala">🇬🇹 Guatemala</option>
+            <option value="Costa Rica">🇨🇷 Costa Rica</option>
+            <option value="Otro">🌎 Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estado / Provincia *</label>
+          <select id="bState">
+            <option value="">— Selecciona país primero —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ciudad</label>
+          <input type="text" id="bCity" placeholder="Ej: Aguascalientes">
         </div>
         <div class="form-group">
           <label>Tono de comunicación</label>
@@ -514,7 +537,63 @@ const PLATFORM_INFO = {
   tiktok:    '🎵 <strong>TikTok 2026:</strong> Caption corto con keywords SEO (es motor de búsqueda), hook en 1.5 seg. Objetivo: Completion rate 70%+'
 };
 
-// ── INIT ──────────────────────────────────────────────────────────────────
+// ── STATES DATA ───────────────────────────────────────────────────────────
+const STATES = {
+  'México': ['Aguascalientes','Baja California','Baja California Sur','Campeche','Chiapas','Chihuahua','Ciudad de México','Coahuila','Colima','Durango','Estado de México','Guanajuato','Guerrero','Hidalgo','Jalisco','Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora','Tabasco','Tamaulipas','Tlaxcala','Veracruz','Yucatán','Zacatecas'],
+  'Estados Unidos': ['Alabama','Alaska','Arizona','California','Colorado','Florida','Georgia','Illinois','Michigan','Nevada','New Jersey','New Mexico','New York','North Carolina','Ohio','Pennsylvania','Texas','Virginia','Washington'],
+  'Colombia': ['Antioquia','Atlántico','Bogotá D.C.','Bolívar','Córdoba','Cundinamarca','Magdalena','Nariño','Santander','Valle del Cauca'],
+  'Argentina': ['Buenos Aires','Catamarca','Chaco','Chubut','Córdoba','Corrientes','Entre Ríos','Formosa','Jujuy','La Pampa','La Rioja','Mendoza','Misiones','Neuquén','Río Negro','Salta','San Juan','San Luis','Santa Cruz','Santa Fe','Santiago del Estero','Tierra del Fuego','Tucumán'],
+  'Chile': ['Arica y Parinacota','Tarapacá','Antofagasta','Atacama','Coquimbo','Valparaíso','Metropolitana','O\'Higgins','Maule','Ñuble','Biobío','La Araucanía','Los Ríos','Los Lagos','Aysén','Magallanes'],
+  'Perú': ['Amazonas','Áncash','Apurímac','Arequipa','Ayacucho','Cajamarca','Callao','Cusco','Huancavelica','Huánuco','Ica','Junín','La Libertad','Lambayeque','Lima','Loreto','Madre de Dios','Moquegua','Pasco','Piura','Puno','San Martín','Tacna','Tumbes','Ucayali'],
+  'España': ['Andalucía','Aragón','Asturias','Baleares','Canarias','Cantabria','Castilla-La Mancha','Castilla y León','Cataluña','Ceuta','Comunidad de Madrid','Comunidad Valenciana','Extremadura','Galicia','La Rioja','Melilla','Murcia','Navarra','País Vasco'],
+  'Guatemala': ['Alta Verapaz','Baja Verapaz','Chimaltenango','Chiquimula','El Progreso','Escuintla','Guatemala','Huehuetenango','Izabal','Jalapa','Jutiapa','Petén','Quetzaltenango','Quiché','Retalhuleu','Sacatepéquez','San Marcos','Santa Rosa','Sololá','Suchitepéquez','Totonicapán','Zacapa'],
+  'Costa Rica': ['Alajuela','Cartago','Guanacaste','Heredia','Limón','Puntarenas','San José'],
+  'Otro': []
+};
+
+function updateStates() {
+  const country = document.getElementById('bCountry').value;
+  const stateSelect = document.getElementById('bState');
+  stateSelect.innerHTML = '';
+  if (!country || country === 'Otro') {
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = '— Escribe tu estado/provincia —';
+    stateSelect.appendChild(opt);
+    stateSelect.disabled = true;
+    // Show text input instead
+    if (!document.getElementById('bStateText')) {
+      const input = document.createElement('input');
+      input.type = 'text'; input.id = 'bStateText';
+      input.placeholder = 'Estado / Provincia';
+      input.style.cssText = 'margin-top:6px;width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit';
+      stateSelect.parentNode.appendChild(input);
+    } else {
+      document.getElementById('bStateText').style.display = 'block';
+    }
+    return;
+  }
+  // Hide text input if exists
+  const textInput = document.getElementById('bStateText');
+  if (textInput) textInput.style.display = 'none';
+  stateSelect.disabled = false;
+  const placeholder = document.createElement('option');
+  placeholder.value = ''; placeholder.textContent = '— Selecciona estado —';
+  stateSelect.appendChild(placeholder);
+  (STATES[country] || []).forEach(state => {
+    const opt = document.createElement('option');
+    opt.value = state; opt.textContent = state;
+    stateSelect.appendChild(opt);
+  });
+}
+
+function getLocation() {
+  const country = document.getElementById('bCountry')?.value || '';
+  const stateEl = document.getElementById('bState');
+  const stateTextEl = document.getElementById('bStateText');
+  const state = (stateEl && !stateEl.disabled ? stateEl.value : stateTextEl?.value) || '';
+  const city = document.getElementById('bCity')?.value?.trim() || '';
+  return [city, state, country].filter(Boolean).join(', ');
+}
 window.addEventListener('DOMContentLoaded', () => {
   const saved = loadBrand();
   if (saved) {
@@ -573,7 +652,7 @@ async function generateBrandGuide() {
         mode: 'brand-guide',
         brandData: {
           name, type,
-          location: document.getElementById('bLocation').value.trim(),
+          location: getLocation(),
           differentiator: diff,
           audience,
           tone: document.getElementById('bTone').value,
@@ -603,7 +682,10 @@ function saveBrand() {
   const brandData = {
     name: document.getElementById('bName').value.trim(),
     type: document.getElementById('bType').value.trim(),
-    location: document.getElementById('bLocation').value.trim(),
+    country: document.getElementById('bCountry').value,
+    state: (document.getElementById('bState')?.value || document.getElementById('bStateText')?.value || '').trim(),
+    city: document.getElementById('bCity').value.trim(),
+    location: getLocation(),
     differentiator: document.getElementById('bDiff').value.trim(),
     audience: document.getElementById('bAudience').value.trim(),
     tone: document.getElementById('bTone').value,
@@ -664,10 +746,18 @@ function goToEdit() {
   if (b) {
     document.getElementById('bName').value = b.name || '';
     document.getElementById('bType').value = b.type || '';
-    document.getElementById('bLocation').value = b.location || '';
     document.getElementById('bDiff').value = b.differentiator || '';
     document.getElementById('bAudience').value = b.audience || '';
     document.getElementById('bTone').value = b.tone || 'Cálido, moderno y cercano';
+    // Restore location
+    if (b.country) {
+      document.getElementById('bCountry').value = b.country;
+      updateStates();
+      setTimeout(() => {
+        if (b.state) document.getElementById('bState').value = b.state;
+      }, 50);
+    }
+    if (b.city) document.getElementById('bCity').value = b.city;
     if (b.colors) {
       document.getElementById('bColor1').value = b.colors.primary || '#2979FF';
       document.getElementById('bColor2').value = b.colors.secondary || '#76C442';
