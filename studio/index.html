@@ -886,8 +886,15 @@ async function generateBrandGuide() {
     document.getElementById('bgSection').classList.add('show');
     document.getElementById('btnSave').disabled=false;
     btn.innerHTML='✅ Brand Guide generado'; btn.style.background='var(--g)';
-    // Store pillars
-    window._pillars = data.pillars || [];
+    // Store pillars — use API response or parse from text as fallback
+    let pillars = data.pillars || [];
+    if (!pillars.length && data.brandGuide) {
+      const matches = data.brandGuide.match(/^\d\.\s+([^(\n]+)\s*\(/gm);
+      if (matches) pillars = matches.map(m => m.replace(/^\d\.\s+/,'').replace(/\s*\(.*$/,'').trim()).filter(Boolean);
+    }
+    window._pillars = pillars;
+    // Also reset button so user can regenerate cleanly
+    btn.disabled = false;
   } catch(err) {
     btn.innerHTML='✨ Generar Brand Guide con AI'; btn.disabled=false;
     alert('Error: '+err.message);
