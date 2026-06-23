@@ -111,6 +111,8 @@ input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:po
 .pillar-btn{padding:6px 13px;border-radius:8px;border:1.5px solid var(--bor);background:var(--w);font-size:12px;font-weight:600;cursor:pointer;color:var(--t3);transition:.15s}
 .pillar-btn:hover{border-color:var(--b);color:var(--b)}
 .pillar-btn.active{background:var(--b);border-color:var(--b);color:#fff}
+.pillar-btn.pillar-fixed{border-color:var(--pk);color:var(--pk)}
+.pillar-btn.pillar-fixed.active{background:var(--pk);border-color:var(--pk);color:#fff}
 /* Platform */
 .plt-tabs{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap}
 .plt-tab{padding:8px 16px;border-radius:10px;border:1.5px solid var(--bor);background:var(--w);font-size:12px;font-weight:700;cursor:pointer;color:var(--t3);transition:.15s;display:flex;align-items:center;gap:6px}
@@ -220,6 +222,8 @@ input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:po
 .cap-copy-btn{width:100%;padding:8px;background:var(--bg);border:1px solid var(--bor);border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;color:var(--t2);transition:.15s}
 .cap-copy-btn:hover{background:var(--b);color:#fff;border-color:var(--b)}
 .cap-copy-btn.ok{background:var(--g);color:#fff;border-color:var(--g)}
+.post-hint{font-size:11px;color:var(--t3);line-height:1.5;padding:5px 2px;border-top:.5px solid var(--bor);margin-top:4px}
+.post-hint strong{color:var(--t2)}
 /* Regen buttons */
 .regen-btns{display:flex;gap:8px;margin-bottom:10px}
 .btn-regen{flex:1;padding:9px;background:var(--bg);border:1.5px solid var(--bor);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;color:var(--t2);transition:.15s;display:flex;align-items:center;justify-content:center;gap:5px}
@@ -628,6 +632,10 @@ Ej: 'Wonderik es increíble. Mi hija de 3 años ya lee palabras cortas y su desa
         <div class="img-panel">
           <img id="resultImg" src="" alt="Generada por AI">
           <div class="photo-desc-bar" id="photoDescBar"></div>
+          <div id="keyQuoteWrap" style="display:none;padding:10px 14px;background:#FDF0DC;border-top:1px solid rgba(200,121,26,.2)">
+            <div style="font-size:10px;font-weight:700;color:#854F0B;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">⭐ Quote destacada del cliente</div>
+            <div id="keyQuoteText" style="font-size:13px;font-style:italic;color:#633806;line-height:1.5;font-weight:500"></div>
+          </div>
           <div class="img-controls">
             <div class="logo-toggle">
               <span class="lt-label">🏷️ Logo en la imagen</span>
@@ -657,6 +665,7 @@ Ej: 'Wonderik es increíble. Mi hija de 3 años ya lee palabras cortas y su desa
               <div contenteditable="true" class="cap-text" id="igCap" spellcheck="false"></div>
               <div contenteditable="true" class="cap-tags" id="igHash" spellcheck="false"></div>
               <div class="cap-cta">🎯 <span id="igCta"></span></div>
+              <div class="post-hint">⏰ <strong>Mejor hora:</strong> Martes a Viernes, 9-11am o 6-8pm · Objetivo: que lo guarden y lo compartan por DM</div>
               <button class="cap-copy-btn" onclick="copyCaption('ig',this)">📋 Copiar para Instagram</button>
             </div>
             <!-- FB -->
@@ -664,11 +673,13 @@ Ej: 'Wonderik es increíble. Mi hija de 3 años ya lee palabras cortas y su desa
               <div contenteditable="true" class="cap-text" id="fbCap" spellcheck="false"></div>
               <div contenteditable="true" class="cap-tags" id="fbHash" spellcheck="false"></div>
               <div class="cap-cta">🎯 <span id="fbCta"></span></div>
+              <div class="post-hint">⏰ <strong>Mejor hora:</strong> Miércoles a Viernes, 9am-1pm · Objetivo: que comenten y lo compartan en grupos</div>
               <button class="cap-copy-btn" onclick="copyCaption('fb',this)">📋 Copiar para Facebook</button>
             </div>
             <!-- TT -->
             <div class="cap-tab" id="capTT">
-              <div contenteditable="true" class="cap-text" id="ttCap" spellcheck="false"></div>
+              <div contenteditable="true" class="cap-text" id="ttCap" spellcheck="false" oninput="updateTTCounter()"></div>
+              <div id="ttCounter" style="font-size:10px;font-weight:700;text-align:right;padding:2px 6px;border-radius:4px;margin-bottom:4px;background:var(--g3);color:var(--g2)">0 / 150 chars</div>
               <div contenteditable="true" class="cap-tags" id="ttHash" spellcheck="false"></div>
               <div class="tt-script-box">
                 <div class="tsb-label">🎬 Hook (primeros 1.5 seg)</div>
@@ -676,6 +687,7 @@ Ej: 'Wonderik es increíble. Mi hija de 3 años ya lee palabras cortas y su desa
                 <div class="tsb-label" style="margin-top:8px">📝 Script</div>
                 <div contenteditable="true" class="tsb-text" id="ttScript" spellcheck="false"></div>
               </div>
+              <div class="post-hint">⏰ <strong>Mejor hora:</strong> 6-10pm cualquier día · Caption ideal: 50-150 caracteres con keywords de búsqueda</div>
               <button class="cap-copy-btn" onclick="copyCaption('tt',this)">📋 Copiar para TikTok</button>
             </div>
           </div>
@@ -896,7 +908,13 @@ async function generateBrandGuide() {
   const aud=document.getElementById('bAudience').value.trim();
   if(!name||!diff||!aud){ alert('Completa al menos: Nombre, Diferenciador y Audiencia.'); return; }
   const btn=document.getElementById('btnGenBG');
-  btn.innerHTML='<div class="spin-sm"></div> Generando...'; btn.disabled=true;
+  btn.innerHTML='<div class="spin-sm"></div> Generando tu Brand Guide...'; btn.disabled=true;
+  // Show time estimate to user
+  const timeNote = document.createElement('p');
+  timeNote.id='bgTimeNote';
+  timeNote.style.cssText='font-size:12px;color:var(--t3);margin-top:8px;text-align:center';
+  timeNote.textContent='☕ Esto puede tomar hasta 1 minuto — la AI está analizando tu negocio a fondo';
+  btn.parentNode.insertBefore(timeNote, btn.nextSibling);
   try {
     const res=await fetch(WORKER,{ method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ mode:'brand-guide', brandData:{
@@ -913,6 +931,7 @@ async function generateBrandGuide() {
     document.getElementById('bgSection').classList.add('show');
     document.getElementById('btnSave').disabled=false;
     btn.innerHTML='✅ Brand Guide generado'; btn.style.background='var(--g)';
+    const tn=document.getElementById('bgTimeNote'); if(tn) tn.remove();
     // Store pillars — use API response or parse from text as fallback
     let pillars = data.pillars || [];
     if (!pillars.length && data.brandGuide) {
@@ -943,14 +962,20 @@ function saveBrand() {
     colors:{ primary:document.getElementById('bC1').value, secondary:document.getElementById('bC2').value, accent:document.getElementById('bC3').value },
     brandGuide:document.getElementById('bgText').value,
     pillars:(()=>{
-      let p = window._pillars||[];
+      // Always re-parse from the current brand guide text — most reliable source
+      const txt = document.getElementById('bgText').value;
+      let p = [];
+      // Try: "1. Pilar Name (XX%)" format
+      const m1 = txt.match(/^\d\.\s+([^\n(]+?)(?:\s*\(\d+%\)|\s*—)/gm);
+      if(m1) p = m1.map(s=>s.replace(/^\d\.\s+/,'').replace(/\s*\(\d+%\).*/,'').replace(/\s*—.*/,'').trim()).filter(s=>s.length>1);
+      // Fallback: "1. Pilar Name" on its own line
       if(!p.length){
-        // Parse from brand guide text
-        const txt = document.getElementById('bgText').value;
-        const m = txt.match(/^\d\.\s+([^(\n]+)\s*\(/gm);
-        if(m) p = m.map(s=>s.replace(/^\d\.\s+/,'').replace(/\s*\(.*$/,'').trim()).filter(Boolean);
+        const m2 = txt.match(/^\d\.\s+(.+)$/gm);
+        if(m2) p = m2.map(s=>s.replace(/^\d\.\s+/,'').trim()).filter(s=>s.length>1&&s.length<60);
       }
-      return p;
+      // Last resort: use window._pillars if above failed
+      if(!p.length) p = window._pillars||[];
+      return p.slice(0,4); // Max 4 custom pillars
     })(),
     logo:logoB64
   };
@@ -980,10 +1005,16 @@ function applyBrand(b) {
 
 function buildPillarBtns(pillars) {
   const wrap=document.getElementById('pillarBtns'); wrap.innerHTML='';
-  const all=['General',...pillars];
+  // Fixed conversion pillar — always last, works for any business type
+  const FIXED_PILLAR = 'Ventas / Admisiones';
+  // Filter out any sales-related pillar from brand guide to avoid duplicates
+  const salesKeywords = ['venta','admisi','inscri','conversi','promo'];
+  const custom = (pillars||[]).filter(p => !salesKeywords.some(k=>p.toLowerCase().includes(k)));
+  const all = ['General', ...custom, FIXED_PILLAR];
   all.forEach(p=>{
     const btn=document.createElement('button');
-    btn.className='pillar-btn'+(p==='General'?' active':'');
+    const isFixed = p===FIXED_PILLAR;
+    btn.className='pillar-btn'+(p==='General'?' active':'')+(isFixed?' pillar-fixed':'');
     btn.dataset.pillar=p;
     btn.textContent=p;
     btn.onclick=()=>setPillar(btn);
@@ -1009,11 +1040,14 @@ function goToEdit() {
       document.getElementById('bgText').value=b.brandGuide;
       document.getElementById('bgSection').classList.add('show');
       document.getElementById('btnSave').disabled=false;
-      // Restore pillars: from stored array or parse from text
-      window._pillars = (b.pillars && b.pillars.length) ? b.pillars : (() => {
-        const m = b.brandGuide.match(/^\d\.\s+([^(\n]+)\s*\(/gm);
-        return m ? m.map(s=>s.replace(/^\d\.\s+/,'').replace(/\s*\(.*$/,'').trim()).filter(Boolean) : [];
-      })();
+      // Re-parse pillars fresh from the text
+      const txt = b.brandGuide;
+      let pp = [];
+      const m1 = txt.match(/^\d\.\s+([^\n(]+?)(?:\s*\(\d+%\)|\s*—)/gm);
+      if(m1) pp = m1.map(s=>s.replace(/^\d\.\s+/,'').replace(/\s*\(\d+%\).*/,'').replace(/\s*—.*/,'').trim()).filter(s=>s.length>1);
+      if(!pp.length){ const m2=txt.match(/^\d\.\s+(.+)$/gm); if(m2) pp=m2.map(s=>s.replace(/^\d\.\s+/,'').trim()).filter(s=>s.length>1&&s.length<60); }
+      if(!pp.length) pp = b.pillars||[];
+      window._pillars = pp.slice(0,4);
       const btn=document.getElementById('btnGenBG');
       btn.innerHTML='✅ Brand Guide cargado — puedes regenerar';
       btn.style.background='var(--g)'; btn.disabled=false;
@@ -1060,6 +1094,9 @@ async function generate() {
   if(mode==='enhance'&&!enhanceB64){ alert('Sube una foto primero.'); return; }
   if(mode==='flyer'&&!document.getElementById('flyerTitle2').value.trim()){ alert('Escribe el título del flyer.'); return; }
   if(mode==='flyer'&&flyerMode==='photo'&&!flyerPhotoB64){ alert('Sube una foto para el flyer.'); return; }
+  if(mode==='testimonial'&&!document.getElementById('testText').value.trim()&&!testPhotoB64){
+    alert('Pega una reseña de tu cliente o sube su foto para continuar.'); return;
+  }
 
   showLoading(true);
   const bg=brand.brandGuide||`Negocio: ${brand.name}. Diferenciador: ${brand.differentiator}. Audiencia: ${brand.audience}.`;
@@ -1088,17 +1125,19 @@ async function genPost(brand,bg) {
   showResult({ ...capRes, imageUrl:imgRes.imageUrl });
 }
 async function genEnhance(brand,bg) {
-  setStep(1); setStep(2); setStep(3);
-  const res=await post({ mode:'enhance', imageBase64:enhanceB64, imageType:enhanceMime, brandGuide:bg, brandData:brand, pillar });
-  setStep(4);
+  setStep(1);
+  // Single call that runs Claude + OpenAI in parallel on the Worker
+  setStep(2);
+  const res=await postWithTimeout({ mode:'enhance', imageBase64:enhanceB64, imageType:enhanceMime, brandGuide:bg, brandData:brand, pillar }, 55000);
+  setStep(3); setStep(4);
   showResult(res);
 }
 async function genFlyerAI(brand,bg) {
   const fd=getFlyerData();
-  setStep(1); setStep(2);
-  setStep(3);
-  const res=await post({ mode:'flyer', flyerData:fd, brandGuide:bg, brandData:brand });
-  setStep(4);
+  setStep(1);
+  setStep(2);
+  const res=await postWithTimeout({ mode:'flyer', flyerData:fd, brandGuide:bg, brandData:brand }, 55000);
+  setStep(3); setStep(4);
   showResult(res);
 }
 async function genFlyerPhoto(brand,bg) {
@@ -1134,24 +1173,48 @@ function getFlyerData() {
 }
 
 async function post(body) {
-  const res=await fetch(WORKER,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
-  const data=await res.json();
-  if(!res.ok||!data.success) throw new Error(data.error||'Error del servidor');
-  return data;
+  return postWithTimeout(body);
+}
+async function postWithTimeout(body, timeoutMs=55000) {
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(WORKER, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    const data = await res.json();
+    if(!res.ok||!data.success) throw new Error(data.error||'Error del servidor');
+    return data;
+  } catch(e) {
+    clearTimeout(timer);
+    if(e.name==='AbortError') throw new Error('La solicitud tardó demasiado. Intenta de nuevo — las imágenes AI pueden tardar hasta 45 seg.');
+    throw e;
+  }
 }
 
 // ═══════════════════════════════════════════════════════
 // REGEN
 // ═══════════════════════════════════════════════════════
 async function regenImage() {
-  if(!lastResult?.imagePrompt&&!lastResult) return;
+  // Enhance and testimonial use real/AI-edited photos — regenerating would lose context
+  if(lastInput?.mode==='enhance') {
+    alert('En Estudio Pro la imagen es tu foto editada. Para una versión diferente, sube la foto nuevamente.');
+    return;
+  }
+  if(!lastResult?.imagePrompt) {
+    alert('No hay prompt de imagen disponible para regenerar.');
+    return;
+  }
   document.getElementById('regenImg').disabled=true;
   try {
-    const imgRes=await post({ mode:'image', imagePrompt:lastResult.imagePrompt||'Professional social media graphic' });
+    const imgRes=await postWithTimeout({ mode:'image', imagePrompt:lastResult.imagePrompt });
     lastResult.imageUrl=imgRes.imageUrl;
     document.getElementById('resultImg').src=imgRes.imageUrl;
-    await redrawCanvas();
-  } catch(e){ alert('Error: '+e.message); }
+  } catch(e){ alert('Error al regenerar imagen: '+e.message); }
   document.getElementById('regenImg').disabled=false;
 }
 async function regenText() {
@@ -1161,13 +1224,13 @@ async function regenText() {
   const bg=brand?.brandGuide||`Negocio: ${brand?.name}.`;
   try {
     let data;
-    if(lastInput.mode==='post'){
-      data=await post({ mode:'captions', textInput:document.getElementById('postText').value||'Post para el negocio', brandGuide:bg, brandData:brand, pillar:lastInput.pillar, platform:lastInput.platform });
-    } else {
-      data=await post({ mode:'captions', textInput:'Contenido del negocio', brandGuide:bg, brandData:brand, pillar:lastInput.pillar, platform:lastInput.platform });
-    }
+    let textInput = 'Contenido del negocio';
+    if(lastInput.mode==='post') textInput = document.getElementById('postText').value||'Post para el negocio';
+    else if(lastResult?.photoDescription) textInput = lastResult.photoDescription; // Use actual photo description
+    else if(lastInput.mode==='testimonial') textInput = document.getElementById('testText').value||'Testimonio de cliente';
+    data = await postWithTimeout({ mode:'captions', textInput, brandGuide:bg, brandData:brand, pillar:lastInput.pillar, platform:lastInput.platform });
     fillCaptions(data);
-  } catch(e){ alert('Error: '+e.message); }
+  } catch(e){ alert('Error al regenerar texto: '+e.message); }
   document.getElementById('regenText').disabled=false;
 }
 
@@ -1181,6 +1244,12 @@ function showResult(data) {
   document.getElementById('resultImg').src=data.imageUrl||'';
   const pd=document.getElementById('photoDescBar');
   if(data.photoDescription){ pd.textContent='📷 '+data.photoDescription; pd.classList.add('show'); } else pd.classList.remove('show');
+  // Show keyQuote for testimonials
+  const kqWrap = document.getElementById('keyQuoteWrap');
+  if(data.keyQuote && data.postType==='Testimonio') {
+    document.getElementById('keyQuoteText').textContent = '"' + data.keyQuote + '"';
+    kqWrap.style.display='block';
+  } else { kqWrap.style.display='none'; }
   // Fill captions
   fillCaptions(data);
   // Ad brief
@@ -1203,6 +1272,7 @@ function fillCaptions(data) {
   document.getElementById('fbCta').textContent=fb.cta||'';
   set('ttCap', tt.caption||'');
   set('ttHash', tt.hashtags||'');
+  updateTTCounter();
   set('ttHook', tt.hook||'');
   set('ttScript', tt.script||'');
 }
@@ -1226,6 +1296,17 @@ function showCapTab(tab, btn) {
   document.querySelectorAll('.ctn-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   showCapTabById(tab);
+}
+function updateTTCounter() {
+  const el = document.getElementById('ttCap');
+  const counter = document.getElementById('ttCounter');
+  if(!el||!counter) return;
+  const len = el.textContent.length;
+  const ok = len >= 50 && len <= 150;
+  const low = len < 50;
+  counter.textContent = `${len} / 150 chars`;
+  counter.style.background = ok ? 'var(--g3)' : low ? 'var(--yellow3)' : '#FDECEA';
+  counter.style.color = ok ? 'var(--g2)' : low ? '#856404' : '#C0392B';
 }
 function showCapTabById(tab) {
   document.querySelectorAll('.cap-tab').forEach(p=>p.classList.remove('active'));
@@ -1360,13 +1441,29 @@ function darken(hex,amt) {
 // ═══════════════════════════════════════════════════════
 // LOADING
 // ═══════════════════════════════════════════════════════
+const MODE_LOADING = {
+  post:        { title:'Creando tu Post...', time:'~20 segundos',
+    steps:['Analizando tu solicitud','Generando captions para 3 plataformas','Creando imagen con AI','Preparando resultado'] },
+  enhance:     { title:'Editando tu foto profesionalmente...', time:'~35 segundos — editando tu foto real con AI',
+    steps:['Analizando tu foto','Generando captions optimizados','Aplicando mejoras profesionales a la imagen','Preparando resultado'] },
+  flyer:       { title:'Diseñando tu Flyer...', time:'~30 segundos',
+    steps:['Analizando el contenido del flyer','Generando captions para 3 plataformas','Diseñando el gráfico con AI','Preparando resultado'] },
+  testimonial: { title:'Transformando el testimonio...', time:'~25 segundos',
+    steps:['Analizando la reseña del cliente','Generando captions auténticos','Creando imagen de fondo','Preparando resultado'] }
+};
 function showLoading(on) {
   document.getElementById('inputCard').style.display=on?'none':'block';
   document.querySelector('.mode-cards').style.display=on?'none':'grid';
   document.getElementById('loadWrap').classList.toggle('show',on);
   document.getElementById('resultWrap').classList.remove('show');
   document.getElementById('errWrap').classList.remove('show');
-  if(on){ ['ls1','ls2','ls3','ls4'].forEach(id=>document.getElementById(id).className='ls'); }
+  if(on){
+    const cfg = MODE_LOADING[mode] || MODE_LOADING.post;
+    document.getElementById('loadTitle').textContent = cfg.title;
+    document.querySelector('.load-wrap p').innerHTML =
+      `⏱️ ${cfg.time} · <span style="color:var(--t3)">No cierres esta pestaña</span>`;
+    cfg.steps.forEach((s,i)=>{ const el=document.getElementById('ls'+(i+1)); el.className='ls'; el.textContent=s; });
+  }
 }
 let _stepTimer=null;
 function setStep(n) {
