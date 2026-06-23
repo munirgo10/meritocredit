@@ -750,6 +750,29 @@ let testPhotoB64 = null, testPhotoMime = 'image/jpeg';
 let lastResult = null, lastInput = null;
 
 // ═══════════════════════════════════════════════════════
+// PNG CONVERSION (for OpenAI Edit API)
+// ═══════════════════════════════════════════════════════
+function convertToPNG(base64, mimeType, maxSize=1024) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const size = Math.min(Math.min(img.width, img.height), maxSize);
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      // Center crop to square
+      const sx = (img.width - size) / 2;
+      const sy = (img.height - size) / 2;
+      ctx.drawImage(img, sx, sy, size, size, 0, 0, size, size);
+      const pngB64 = canvas.toDataURL('image/png').split(',')[1];
+      resolve({ b64: pngB64, mimeType: 'image/png' });
+    };
+    img.onerror = () => resolve({ b64: base64, mimeType }); // fallback to original
+    img.src = `data:${mimeType};base64,${base64}`;
+  });
+}
+
+// ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
@@ -831,7 +854,11 @@ function setupUploads() {
     reader.readAsDataURL(e.target.files[0]);
   });
   // Enhance
-  setupDropzone('enhanceZone','enhanceFile','enhancePrev','enhanceTitle','enhanceName', (b64,mime)=>{ enhanceB64=b64; enhanceMime=mime; });
+  setupDropzone('enhanceZone','enhanceFile','enhancePrev','enhanceTitle','enhanceName', async (b64,mime)=>{
+    // Convert to PNG for OpenAI Edit API compatibility
+    const converted = await convertToPNG(b64, mime, 1024);
+    enhanceB64 = converted.b64; enhanceMime = 'image/png';
+  });
   // Flyer
   setupDropzone('flyerZone','flyerFile','flyerPrev','flyerTitle','flyerName', (b64,mime)=>{ flyerPhotoB64=b64; flyerPhotoMime=mime; });
   // Testimonial
@@ -915,7 +942,16 @@ function saveBrand() {
     tone:document.getElementById('bTone').value,
     colors:{ primary:document.getElementById('bC1').value, secondary:document.getElementById('bC2').value, accent:document.getElementById('bC3').value },
     brandGuide:document.getElementById('bgText').value,
-    pillars:window._pillars||[],
+    pillars:(()=>{
+      let p = window._pillars||[];
+      if(!p.length){
+        // Parse from brand guide text
+        const txt = document.getElementById('bgText').value;
+        const m = txt.match(/^\d\.\s+([^(\n]+)\s*\(/gm);
+        if(m) p = m.map(s=>s.replace(/^\d\.\s+/,'').replace(/\s*\(.*$/,'').trim()).filter(Boolean);
+      }
+      return p;
+    })(),
     logo:logoB64
   };
   localStorage.setItem(STORE_KEY,JSON.stringify(brand));
@@ -969,7 +1005,19 @@ function goToEdit() {
     if(b.city) document.getElementById('bCity').value=b.city;
     if(b.colors){ document.getElementById('bC1').value=b.colors.primary; document.getElementById('bC2').value=b.colors.secondary; document.getElementById('bC3').value=b.colors.accent; }
     if(b.logo){ logoB64=b.logo; const img=document.getElementById('logoImg'); img.src=b.logo; img.style.display='block'; document.getElementById('logoPlus').style.display='none'; }
-    if(b.brandGuide){ document.getElementById('bgText').value=b.brandGuide; document.getElementById('bgSection').classList.add('show'); document.getElementById('btnSave').disabled=false; window._pillars=b.pillars||[]; const btn=document.getElementById('btnGenBG'); btn.innerHTML='✅ Brand Guide cargado'; btn.style.background='var(--g)'; }
+    if(b.brandGuide){
+      document.getElementById('bgText').value=b.brandGuide;
+      document.getElementById('bgSection').classList.add('show');
+      document.getElementById('btnSave').disabled=false;
+      // Restore pillars: from stored array or parse from text
+      window._pillars = (b.pillars && b.pillars.length) ? b.pillars : (() => {
+        const m = b.brandGuide.match(/^\d\.\s+([^(\n]+)\s*\(/gm);
+        return m ? m.map(s=>s.replace(/^\d\.\s+/,'').replace(/\s*\(.*$/,'').trim()).filter(Boolean) : [];
+      })();
+      const btn=document.getElementById('btnGenBG');
+      btn.innerHTML='✅ Brand Guide cargado — puedes regenerar';
+      btn.style.background='var(--g)'; btn.disabled=false;
+    }
   }
   showScreen('setupScreen');
 }
@@ -1222,8 +1270,8 @@ async function downloadImg(format) {
   const canvas=document.createElement('canvas');
   const ctx=canvas.getContext('2d');
   const img=await loadImg(imgEl.src);
-  const showLogo=document.getElementById('logoToggle').checked && logoB64 || (brand?.logo && document.getElementById('logoToggle').checked);
-  const logoSrc=logoB64||brand?.logo;
+  const showLogo = document.getElementById('logoToggle').checked;
+  const logoSrc = logoB64 || brand?.logo; // Use session upload or stored brand logo
 
   if(format==='square'){ canvas.width=canvas.height=1080; ctx.drawImage(img,0,0,1080,1080); }
   else if(format==='portrait'){
@@ -1241,16 +1289,21 @@ async function downloadImg(format) {
 
   if(showLogo && logoSrc) {
     try {
-      const logo=await loadImg(logoSrc);
-      const sz=Math.round(canvas.width*0.13);
-      const x=canvas.width-sz-20, y=canvas.height-sz-20;
-      ctx.save();
-      ctx.beginPath(); ctx.arc(x+sz/2,y+sz/2,sz/2+5,0,Math.PI*2);
-      ctx.fillStyle='rgba(255,255,255,.9)'; ctx.fill();
-      ctx.beginPath(); ctx.arc(x+sz/2,y+sz/2,sz/2,0,Math.PI*2); ctx.clip();
-      ctx.drawImage(logo,x,y,sz,sz);
-      ctx.restore();
-    } catch(e){}
+      const logo = await loadImg(logoSrc);
+      if(logo) { // loadImg returns null on error
+        const sz = Math.round(canvas.width * 0.13);
+        const x = canvas.width - sz - 20;
+        const y = canvas.height - sz - 20;
+        ctx.save();
+        // White circle background
+        ctx.beginPath(); ctx.arc(x+sz/2, y+sz/2, sz/2+6, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.fill();
+        // Clip to circle and draw logo
+        ctx.beginPath(); ctx.arc(x+sz/2, y+sz/2, sz/2, 0, Math.PI*2); ctx.clip();
+        ctx.drawImage(logo, x, y, sz, sz);
+        ctx.restore();
+      }
+    } catch(e){ console.warn('Logo overlay failed:', e); }
   }
 
   canvas.toBlob(blob=>{ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`post-${format}-${Date.now()}.jpg`; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); },'image/jpeg',.93);
@@ -1290,7 +1343,14 @@ async function composeFlyerCanvas(photoB64, photoMime, fd, brand) {
 }
 
 function loadImg(src) {
-  return new Promise((res,rej)=>{ const i=new Image(); i.crossOrigin='anonymous'; i.onload=()=>res(i); i.onerror=rej; i.src=src; });
+  return new Promise((res,rej)=>{
+    const i=new Image();
+    // Only set crossOrigin for external URLs, not data URLs (avoids CORS taint issues)
+    if (!src.startsWith('data:')) i.crossOrigin='anonymous';
+    i.onload=()=>res(i);
+    i.onerror=()=>res(null); // Resolve null instead of rejecting so flow continues
+    i.src=src;
+  });
 }
 function darken(hex,amt) {
   const n=parseInt(hex.replace('#',''),16);
