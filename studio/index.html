@@ -512,28 +512,6 @@ input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:po
     </div>
     <div class="plt-info show" id="pltInfo">📸 <strong>Instagram 2026:</strong> Keywords en caption, hook en primera línea, 3-5 hashtags. Meta: Guardados + compartidos por DM.</div>
 
-    <!-- Image Style Selector -->
-    <div class="style-sel-wrap" id="styleSel">
-      <div class="style-sel-label">Estilo de imagen generada</div>
-      <div class="style-btns">
-        <button class="style-btn" id="sPhoto" onclick="setImageStyle('photo',this)">
-          <span class="sb-icon">📸</span>
-          <span class="sb-name">Fotorrealista</span>
-          <span class="sb-desc">Niño genérico en actividad</span>
-        </button>
-        <button class="style-btn active" id="sIllus" onclick="setImageStyle('illustrated',this)">
-          <span class="sb-icon">🎨</span>
-          <span class="sb-name">Ilustrado</span>
-          <span class="sb-desc">Gráfico colorido, sin personas</span>
-        </button>
-        <button class="style-btn" id="sAbstr" onclick="setImageStyle('abstract',this)">
-          <span class="sb-icon">🌈</span>
-          <span class="sb-name">Abstracto</span>
-          <span class="sb-desc">Fondo de marca para texto</span>
-        </button>
-      </div>
-    </div>
-
     <!-- Mode Cards -->
     <div class="mode-cards">
       <div class="mode-card active" id="mc1" onclick="setMode('post')">
@@ -555,6 +533,28 @@ input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:po
         <div class="mc-icon">⭐</div>
         <div class="mc-title">Testimonio</div>
         <div class="mc-desc">Reseña → post profesional</div>
+      </div>
+    </div>
+
+    <!-- Image Style Selector — below mode cards -->
+    <div class="style-sel-wrap" id="styleSel">
+      <div class="style-sel-label">Estilo de imagen generada</div>
+      <div class="style-btns">
+        <button class="style-btn" id="sPhoto" onclick="setImageStyle('photo',this)">
+          <span class="sb-icon">📸</span>
+          <span class="sb-name">Fotorrealista</span>
+          <span class="sb-desc">Niño genérico en actividad</span>
+        </button>
+        <button class="style-btn active" id="sIllus" onclick="setImageStyle('illustrated',this)">
+          <span class="sb-icon">🎨</span>
+          <span class="sb-name">Ilustrado</span>
+          <span class="sb-desc">Gráfico colorido, sin personas</span>
+        </button>
+        <button class="style-btn" id="sAbstr" onclick="setImageStyle('abstract',this)">
+          <span class="sb-icon">🌈</span>
+          <span class="sb-name">Abstracto</span>
+          <span class="sb-desc">Fondo de marca para texto</span>
+        </button>
       </div>
     </div>
 
@@ -1255,12 +1255,21 @@ async function genFlyerAI(brand,bg) {
 }
 async function genFlyerPhoto(brand,bg) {
   const fd=getFlyerData();
+  // CALL 1: Captions only (~5-8 sec) — well within 30s Cloudflare limit
   setStep(1);
+  const capRes=await postWithTimeout({ mode:'flyer-captions', flyerData:fd, brandGuide:bg, brandData:brand }, 30000);
   setStep(2);
-  // Use OpenAI Edit API to design flyer on real photo (Option B)
-  const res=await postWithTimeout({ mode:'flyer-photo-edit', flyerData:fd, imageBase64:flyerPhotoB64, imageType:flyerPhotoMime, brandGuide:bg, brandData:brand }, 55000);
-  setStep(3); setStep(4);
-  showResult(res);
+  // CALL 2: Edit real photo via OpenAI Edit API (~20-25 sec)
+  setStep(3);
+  const imgRes=await postWithTimeout({
+    mode:'flyer-photo-edit',
+    flyerData:fd,
+    imageBase64:flyerPhotoB64,
+    imageType:flyerPhotoMime,
+    brandData:brand
+  }, 30000);
+  setStep(4);
+  showResult({ ...capRes, imageUrl:imgRes.imageUrl, postType:fd.type });
 }
 async function genTestimonial(brand,bg) {
   setStep(1); setStep(2); setStep(3);
@@ -1565,6 +1574,7 @@ const MODE_LOADING = {
 function showLoading(on) {
   document.getElementById('inputCard').style.display=on?'none':'block';
   document.querySelector('.mode-cards').style.display=on?'none':'grid';
+  const ss=document.getElementById('styleSel'); if(ss) ss.style.display=on?'none':'';
   document.getElementById('loadWrap').classList.toggle('show',on);
   document.getElementById('resultWrap').classList.remove('show');
   document.getElementById('errWrap').classList.remove('show');
