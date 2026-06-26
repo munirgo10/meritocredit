@@ -253,6 +253,19 @@ input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:po
 /* Error */
 .err-wrap{display:none;text-align:center;padding:36px 16px}
 .err-wrap.show{display:block}
+/* Enhance mode toggle */
+.enhance-mode-wrap{margin-bottom:12px}
+.enhance-mode-btns{display:flex;gap:8px;margin-bottom:10px}
+.em-btn{flex:1;padding:9px 12px;border-radius:9px;border:1.5px solid var(--bor);background:var(--w);font-size:12px;font-weight:700;cursor:pointer;color:var(--t3);transition:.15s;text-align:center;font-family:inherit}
+.em-btn:hover{border-color:var(--b);color:var(--b)}
+.em-btn.active{background:var(--b);border-color:var(--b);color:#fff}
+.enhance-prompt-wrap{display:none}
+.enhance-prompt-wrap.show{display:block}
+.ep-hint{font-size:11px;color:var(--t3);margin-top:5px;line-height:1.5}
+.ep-examples{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.ep-ex{font-size:11px;padding:4px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--bor);color:var(--t3);cursor:pointer;transition:.15s}
+.ep-ex:hover{border-color:var(--b);color:var(--b);background:var(--b3)}
+
 /* Image style selector */
 .style-sel-wrap{margin-bottom:16px;display:none}
 .style-sel-wrap.show{display:block}
@@ -573,10 +586,40 @@ input[type=color]{width:28px;height:28px;border:none;border-radius:6px;cursor:po
           <input type="file" id="enhanceFile" accept="image/*">
           <div class="uz-icon">🖼️</div>
           <div class="uz-title" id="enhanceTitle">Arrastra tu foto o haz click</div>
-          <div class="uz-sub">JPG, PNG · Máx 10MB · La AI la transformará en imagen publicitaria profesional</div>
+          <div class="uz-sub">JPG, PNG · Máx 10MB</div>
           <div class="uz-name" id="enhanceName"></div>
         </div>
         <img id="enhancePrev" class="photo-prev" src="" alt="">
+        <!-- Enhance mode selector -->
+        <div class="enhance-mode-wrap" style="margin-top:12px">
+          <div class="ic-label">¿Qué quieres hacer con la foto?</div>
+          <div class="enhance-mode-btns">
+            <button class="em-btn active" id="emAuto" onclick="setEnhanceMode('auto',this)">
+              ✨ Mejorar automáticamente
+            </button>
+            <button class="em-btn" id="emCustom" onclick="setEnhanceMode('custom',this)">
+              ✏️ Instrucciones personalizadas
+            </button>
+          </div>
+          <div class="enhance-prompt-wrap" id="enhancePromptWrap">
+            <textarea class="text-ta" id="enhancePrompt" rows="3"
+              placeholder="Describe qué quieres hacer con la foto...
+
+Ej: &quot;Quita el fondo y ponlo blanco limpio&quot;
+Ej: &quot;Agrega efecto de estudio con luz suave y profesional&quot;
+Ej: &quot;Convierte en estilo flyer, agrega una banda azul arriba con el texto Curso de Verano&quot;
+Ej: &quot;Hazla blanco y negro estilo editorial de revista&quot;"></textarea>
+            <div class="ep-examples">
+              <span class="ep-ex" onclick="setEnhanceExample(this)">Fondo blanco</span>
+              <span class="ep-ex" onclick="setEnhanceExample(this)">Luz de estudio</span>
+              <span class="ep-ex" onclick="setEnhanceExample(this)">Estilo editorial</span>
+              <span class="ep-ex" onclick="setEnhanceExample(this)">Colores vibrantes</span>
+              <span class="ep-ex" onclick="setEnhanceExample(this)">Blanco y negro</span>
+              <span class="ep-ex" onclick="setEnhanceExample(this)">Estilo flyer</span>
+            </div>
+            <p class="ep-hint">💡 Sé específico — la AI seguirá tus instrucciones exactas. Cuanto más detalle, mejor resultado.</p>
+          </div>
+        </div>
       </div>
       <!-- FLYER MODE -->
       <div id="flyerInput" style="display:none">
@@ -1188,6 +1231,29 @@ function setPillar(btn) {
   document.querySelectorAll('.pillar-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active'); pillar=btn.dataset.pillar;
 }
+// Enhance mode (auto vs custom prompt)
+let enhanceMode = 'auto';
+function setEnhanceMode(m, btn) {
+  enhanceMode = m;
+  document.querySelectorAll('.em-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const wrap = document.getElementById('enhancePromptWrap');
+  wrap.classList.toggle('show', m === 'custom');
+  if(m === 'custom') document.getElementById('enhancePrompt').focus();
+}
+function setEnhanceExample(el) {
+  const ta = document.getElementById('enhancePrompt');
+  const examples = {
+    'Fondo blanco': 'Quita el fondo de la foto y ponlo blanco limpio y profesional',
+    'Luz de estudio': 'Mejora la iluminación al estilo de un estudio fotográfico profesional, luz suave y uniforme',
+    'Estilo editorial': 'Transforma en fotografía estilo editorial de revista, colores ricos y composición elegante',
+    'Colores vibrantes': 'Aumenta la saturación y el contraste, colores vibrantes y llamativos para redes sociales',
+    'Blanco y negro': 'Convierte a blanco y negro profesional estilo fotografía de arte con alto contraste',
+    'Estilo flyer': 'Transforma en diseño tipo flyer publicitario con los colores de la marca y aspecto gráfico profesional'
+  };
+  ta.value = examples[el.textContent.trim()] || el.textContent;
+  ta.focus();
+}
 function setFlyerMode(m) {
   flyerMode=m;
   document.getElementById('flyerAIBtn').classList.toggle('active',m==='ai');
@@ -1239,9 +1305,23 @@ async function genPost(brand,bg) {
 }
 async function genEnhance(brand,bg) {
   setStep(1);
-  // Single call that runs Claude + OpenAI in parallel on the Worker
   setStep(2);
-  const res=await postWithTimeout({ mode:'enhance', imageBase64:enhanceB64, imageType:enhanceMime, brandGuide:bg, brandData:brand, pillar }, 55000);
+  const customPrompt = enhanceMode === 'custom'
+    ? document.getElementById('enhancePrompt').value.trim()
+    : null;
+  if(enhanceMode === 'custom' && !customPrompt) {
+    alert('Describe qué quieres hacer con la foto.'); return;
+  }
+  const res=await postWithTimeout({
+    mode:'enhance',
+    imageBase64:enhanceB64,
+    imageType:enhanceMime,
+    brandGuide:bg,
+    brandData:brand,
+    pillar,
+    enhanceMode,
+    customPrompt
+  }, 55000);
   setStep(3); setStep(4);
   showResult(res);
 }
@@ -1670,6 +1750,15 @@ function resetCreator() {
   document.getElementById('inputCard').style.display='block';
   document.querySelector('.mode-cards').style.display='grid';
   document.getElementById('postText').value='';
+  // Reset enhance mode
+  enhanceMode='auto';
+  const emAuto=document.getElementById('emAuto');
+  const emCustom=document.getElementById('emCustom');
+  if(emAuto){emAuto.classList.add('active'); emCustom.classList.remove('active');}
+  const epWrap=document.getElementById('enhancePromptWrap');
+  if(epWrap) epWrap.classList.remove('show');
+  const ep=document.getElementById('enhancePrompt');
+  if(ep) ep.value='';
   document.getElementById('testText').value='';
   enhanceB64=null; flyerPhotoB64=null; testPhotoB64=null;
   ['enhanceZone','flyerZone','testZone'].forEach(id=>{ const z=document.getElementById(id); if(z)z.classList.remove('has-file'); });
